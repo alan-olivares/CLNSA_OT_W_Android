@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Vistas.ResultTest">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="30dp"
+                android:text="Escanee el código de barras de la etiqueta"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/textView"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/etiquetaRT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="Etiqueta"
+                    android:background="@drawable/edittext"
+                    android:textAlignment="center"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/camaraRT"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/ic_baseline_photo_camera_24"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/aceptarRT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/redondo"
+                    android:text="Aceptar" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/layout1"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:weightSum="2"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:weightSum="2"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Uso"
+                        android:layout_weight="1"
+                        android:layout_marginRight="110px"
+                        android:textSize="16sp"></TextView>
+
+                    <EditText
+                        android:id="@+id/usoRT"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="30px"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:textAlignment="center"></EditText>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:weightSum="2"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Edad"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="110px"
+                        android:textSize="16sp"></TextView>
+
+                    <EditText
+                        android:id="@+id/edadRT"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="30px"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:textAlignment="center"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout2"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/aprovadosTextRT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Total aprobados: 0"
+                    android:textSize="16dp"></TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Resultado de prueba"
+                    android:textColor="@color/azul_menu"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16dp"></TextView>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp">
+
+                    <RadioButton
+                        android:id="@+id/aprovadoRT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Aprobado"
+                        android:checked="true"/>
+                    <RadioButton
+                        android:id="@+id/descartadoRT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Descartar barril" />
+                </RadioGroup>
+                <Button
+                    android:id="@+id/guardarRT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/redondo"
+                    android:text="Guardar"
+                    android:clickable="false"
+                    android:layout_marginBottom="30dp"></Button>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</LinearLayout>

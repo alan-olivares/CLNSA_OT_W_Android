@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Vistas.Reparacion">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/progressRep"
+                android:indeterminateTint="@color/verde_claro"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:foregroundGravity="center"
+                android:visibility="gone"
+                android:indeterminate="true" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_below="@+id/progressRep"
+                android:layout_marginTop="30dp"
+                android:text="Escanee el código de barras de la etiqueta"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/textView"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etiquetaREP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="Etiqueta"
+                    android:background="@drawable/edittext"
+                    android:textAlignment="center"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/camaraREP"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/ic_baseline_photo_camera_24"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/aceptarREP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/des_act_button"
+                    android:text="Aceptar" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/layout1"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:weightSum="2"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/barrilREP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:text="Barril: "></TextView>
+                <TextView
+                    android:id="@+id/msgREP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/rojo_danger"
+                    android:text=""></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout2"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Información de barril"
+                    android:textColor="@color/azul_menu"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16dp"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAlignment="textEnd"
+                        android:textSize="18sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:text="Uso del barril:  "></TextView>
+                    <Spinner
+                        android:id="@+id/usoREP"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"></Spinner>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAlignment="textEnd"
+                        android:textSize="18sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:text="Edad del barril:  "></TextView>
+                    <Spinner
+                        android:id="@+id/edadREP"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"></Spinner>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAlignment="textEnd"
+                        android:textSize="18sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:text="Año del barril:  "></TextView>
+                    <EditText
+                        android:id="@+id/annioREP"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:enabled="false"></EditText>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/continuarREP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/des_act_button"
+                    android:text="Continuar"
+                    android:enabled="false"
+                    android:layout_marginBottom="30dp"></Button>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</LinearLayout>

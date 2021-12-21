@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">TBRE</string>
+    <string name="close">Cerrar</string>
+    <string name="open">Abrir</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_result_test">Resultado de pruebas</string>
+    <string name="title_activity_iniciar_llenado">Iniciar llenado</string>
+    <string name="title_activity_formar_paletas">Formar paletas</string>
+    <string name="title_activity_registro_fallas">Fallas en barriles</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_asing_repa">Reparación de barriles</string>
+    <string name="title_activity_resumen_inv">Resumen de inventario</string>
+    <string name="title_activity_rubicar_tarima">Reubicar Tarima</string>
+</resources>

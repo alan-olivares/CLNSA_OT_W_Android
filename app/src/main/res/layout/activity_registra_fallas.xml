@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Vistas.RegistraFallas">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="30dp"
+                android:text="Escanee el código de barras de la etiqueta"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/textView"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/etiquetaRF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="Etiqueta"
+                    android:background="@drawable/edittext"
+                    android:textAlignment="center"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/camaraRF"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/ic_baseline_photo_camera_24"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Registrar fallas"
+                    android:textColor="@color/azul_menu"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16dp"></TextView>
+
+                <CheckBox
+                    android:id="@+id/orificioRF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Fuga por orificio"></CheckBox>
+                <CheckBox
+                    android:id="@+id/desajusteRF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Fuga por desajuste"></CheckBox>
+                <Button
+                    android:id="@+id/aceptarRF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/redondo"
+                    android:text="Aceptar"
+                    android:clickable="false"
+                    android:layout_marginBottom="30dp"></Button>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</LinearLayout>

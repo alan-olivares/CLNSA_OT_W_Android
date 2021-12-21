@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.pims.alanolivares.clnsa_ot_w">
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:hasFragileUserData="true"
+        android:icon="@mipmap/logo"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/logo_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CLNSA_OT_W">
+        <activity
+            android:name=".Vistas.ReubiTarima"
+            android:label="@string/title_activity_rubicar_tarima"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" ></activity>
+        <activity
+            android:name=".Vistas.ResumenInventario"
+            android:label="@string/title_activity_resumen_inv"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
+        <activity
+            android:name=".Vistas.ConsultaBarril"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
+        <activity
+            android:name=".Vistas.SincBodega"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
+        <activity
+            android:name=".Vistas.RevReparacion"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
+        <activity
+            android:name=".Vistas.AccionMant"
+            android:label="@string/title_activity_asing_repa"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
+        <activity
+            android:name=".Vistas.AsingRepara"
+            android:label="@string/title_activity_asing_repa"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
+        <activity
+            android:name=".Vistas.TrasLoteDest"
+            android:theme="@style/Theme.CLNSA_OT_W"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Vistas.IdentTrasiego"
+            android:theme="@style/Theme.CLNSA_OT_W"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Vistas.IniciarRelleno"
+            android:theme="@style/Theme.CLNSA_OT_W"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Vistas.IdentRelleno"
+            android:theme="@style/Theme.CLNSA_OT_W"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Vistas.MenuRelleno"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Vistas.AvanceOrden"
+            android:theme="@style/Theme.CLNSA_OT_W"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Vistas.RegistraFallas"
+            android:label="@string/title_activity_formar_paletas"
+            android:theme="@style/Theme.CLNSA_OT_W"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Vistas.FormarPaleta"
+            android:label="@string/title_activity_formar_paletas"
+            android:theme="@style/Theme.CLNSA_OT_W"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Dialogos.Lanzas"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:theme="@style/dialog_light" />
+        <activity
+            android:name=".Vistas.IniciarLlenado"
+            android:label="@string/title_activity_iniciar_llenado"
+            android:theme="@style/Theme.CLNSA_OT_W"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Vistas.ResultTest"
+            android:label="@string/title_activity_result_test"
+            android:theme="@style/Theme.CLNSA_OT_W"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".Vistas.MenuLlenado"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W"/>
+        <activity
+            android:name=".Vistas.MenuLateral"
+            android:configChanges="orientation|screenSize"
+            android:label="TBRE"
+            android:theme="@style/Theme.CLNSA_OT_W.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Vistas.Inicio"
+            android:theme="@style/Theme.CLNSA_OT_W.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Vistas.LoginActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+</manifest>

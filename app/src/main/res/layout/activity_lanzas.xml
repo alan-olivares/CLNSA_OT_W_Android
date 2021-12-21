@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+    <ImageButton
+        android:id="@+id/cerrarAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/white"
+        android:src="@drawable/ic_close_black_24dp"/>
+    <LinearLayout
+        android:id="@+id/linearAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Switch
+            android:id="@+id/lanza1Act"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Lanza 1" />
+
+        <Switch
+            android:id="@+id/lanza2Act"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Lanza 2" />
+
+        <Switch
+            android:id="@+id/lanza3Act"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lanza 3" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/mensajeAct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"></TextView>
+    <Button
+        android:id="@+id/guardarAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/des_act_button"
+        android:text="Guardar"
+        android:layout_marginTop="20dp"></Button>
+
+
+</LinearLayout>

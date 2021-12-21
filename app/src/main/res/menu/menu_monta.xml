@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sincronizar"
+        android:title="Sincronizar" />
+    <item
+        android:id="@+id/reubicar"
+        android:title="Reubicar tarima"/>
+    <item
+        android:id="@+id/actualizarBod"
+        android:title="Actualizar bodega" />
+</menu>

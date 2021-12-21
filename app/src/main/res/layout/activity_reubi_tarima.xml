@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gris_fondo"
+    tools:context=".Vistas.ReubiTarima">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:weightSum="3"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/etiquetaRT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="Etiqueta"
+                    android:background="@drawable/edittext"
+                    android:textAlignment="center"
+                    android:layout_weight="1"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/camaraRT"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/ic_baseline_photo_camera_24"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:weightSum="2"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="3"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="2"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:textSize="18sp"
+                            android:layout_marginTop="10dp"
+                            android:text="Planta"></TextView>
+                        <Spinner
+                            android:id="@+id/plantaRT"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:theme="@style/ThemeSpinner"
+                            android:textSize="18sp"></Spinner>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="2"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:textSize="18sp"
+                            android:layout_marginTop="10dp"
+                            android:text="Costado"></TextView>
+                        <Spinner
+                            android:id="@+id/costadoRT"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:theme="@style/ThemeSpinner"
+                            android:textSize="18sp"></Spinner>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="2"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:textSize="18sp"
+                            android:layout_marginTop="10dp"
+                            android:text="Torre"></TextView>
+                        <Spinner
+                            android:id="@+id/torreRT"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:theme="@style/ThemeSpinner"
+                            android:textSize="18sp"></Spinner>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="3"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="2"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:textSize="18sp"
+                            android:layout_marginTop="10dp"
+                            android:text="Bodega"></TextView>
+                        <Spinner
+                            android:id="@+id/bodegaRT"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:theme="@style/ThemeSpinner"
+                            android:textSize="18sp"></Spinner>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="2"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:textSize="18sp"
+                            android:layout_marginTop="10dp"
+                            android:text="Fila"></TextView>
+                        <Spinner
+                            android:id="@+id/filaRT"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:theme="@style/ThemeSpinner"
+                            android:textSize="18sp"></Spinner>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="2"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:textSize="18sp"
+                            android:layout_marginTop="10dp"
+                            android:text="Nivel"></TextView>
+                        <Spinner
+                            android:id="@+id/nivelRT"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:theme="@style/ThemeSpinner"
+                            android:textSize="18sp"></Spinner>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/layout4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout2"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/mensajeRT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/avisoRT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/rojo_danger"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/asignarRT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/des_act_button"
+                    android:layout_marginTop="40dp"
+                    android:text="Asignar tarima" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</LinearLayout>

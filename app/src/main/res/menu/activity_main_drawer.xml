@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group
+        android:checkableBehavior="single"
+        android:enabled="true">
+        <item
+            android:id="@+id/llenado"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_work_24"
+            android:title="Llenado" />
+        <item
+            android:id="@+id/relleno"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_work_24"
+            android:title="Relleno" />
+        <item
+            android:id="@+id/trasiego"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_work_24"
+            android:title="Trasiego" />
+        <item
+            android:id="@+id/trasiegoHo"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_work_24"
+            android:title="Trasiego Hoover" />
+        <item
+            android:id="@+id/reparacion"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_home_repair_service_24"
+            android:title="Reparación" />
+        <item
+            android:id="@+id/revision"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_library_add_check_24"
+            android:title="Revisión" />
+        <item
+            android:id="@+id/montacargas"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_local_shipping_24"
+            android:title="Montacargas" />
+        <item
+            android:id="@+id/inventario"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_notes_24"
+            android:title="Inventario" />
+    </group>
+
+    <item android:title="Más">
+        <menu>
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_baseline_alternate_email_24"
+                android:title="Contacto" />
+            <item
+                android:id="@+id/cerrar"
+                android:icon="@drawable/ic_baseline_login_24"
+                android:title="Cerrar sesión" />
+        </menu>
+    </item>
+</menu>

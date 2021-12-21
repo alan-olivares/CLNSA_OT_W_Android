@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Vistas.ConsultaBarril">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="30dp"
+                android:text="Escanee el código de barras de la etiqueta"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/textView"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:weightSum="2"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/etiquetaCB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="Etiqueta"
+                    android:background="@drawable/edittext"
+                    android:textAlignment="center"
+                    android:layout_weight="1"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/camaraCB"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/ic_baseline_photo_camera_24"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/aceptarCB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/des_act_button"
+                    android:text="Aceptar" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/ultimaCB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/layout1"
+                android:text=""
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ultimaCB"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:weightSum="2"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/annioCB"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Año:"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tipoCB"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Tipo:"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"></TextView>
+                    <TextView
+                        android:id="@+id/llenadaCB"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Llenada:"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"></TextView>
+                    <TextView
+                        android:id="@+id/ubicacionCB"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Ubicación:"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"></TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/alcoholCB"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Alcohol:"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tapaCB"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Tapa:"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"></TextView>
+                    <TextView
+                        android:id="@+id/rellenoCB"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Relleno:"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"></TextView>
+                    <TextView
+                        android:id="@+id/litrosCB"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Litros:"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"></TextView>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout2"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+                    <com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable
+                        android:id="@+id/tablaCB"
+                        android:layout_height="0dp"
+                        android:layout_width="match_parent"
+                        app:tableView_columnCount="1"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="50dp"/>
+                </HorizontalScrollView>
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</LinearLayout>
