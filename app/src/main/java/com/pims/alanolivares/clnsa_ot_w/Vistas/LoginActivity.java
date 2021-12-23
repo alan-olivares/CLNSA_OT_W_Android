@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +27,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -69,21 +74,30 @@ public class LoginActivity extends AppCompatActivity {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(contrasenaEdit.getWindowToken(), 0);
                 attemptLogin();
-
             }
         });
+        revisarPermisos();
+    }
+
+    private boolean revisarPermisos(){
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE )
                 == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE )
-                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA )
-                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE )
-                == PackageManager.PERMISSION_GRANTED){
-
+                == PackageManager.PERMISSION_GRANTED ){
+            File f = new File(Environment.getExternalStorageDirectory().getPath(), "TBRE");
+            try {
+                if(!f.exists()){
+                    Files.createDirectory(Paths.get(f.getPath()));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
         }else{
+            Toast.makeText(this,"Se necesitan que aceptes estos permisos para el funcionamiento de la aplicación",Toast.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.MANAGE_EXTERNAL_STORAGE}, 1);
+            return false;
         }
     }
 
@@ -123,6 +137,10 @@ public class LoginActivity extends AppCompatActivity {
                     focusView.requestFocus();
                 } else {
                     Intent mainIntent=null;
+                    if(!revisarPermisos()){
+                        progressBar.setVisibility(View.GONE);
+                        return;
+                    }
                     if(func.isOnlineNet() && func.servidorActivo()){
                         if(func.horaCorrecta()){
                             String result=func.Login(usuario,password,pistol);
@@ -140,6 +158,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 progressBar.setVisibility(View.GONE);
+
             }
         });
 

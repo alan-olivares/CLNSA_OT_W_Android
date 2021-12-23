@@ -80,8 +80,6 @@ public class Llenado extends ClasePadreFragment {
         descripcion.setColumnModel(columnModel);
         ProgressBar progress=vista.findViewById(R.id.progressDR);
         TextView titulo=vista.findViewById(R.id.descripcion_titulo);
-        bottomSheet.setContentView(vista);
-        bottomSheet.show();
         progress.post(new Runnable() {
             @Override
             public void run(){

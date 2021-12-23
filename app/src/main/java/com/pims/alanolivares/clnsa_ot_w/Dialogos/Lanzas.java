@@ -1,23 +1,16 @@
 package com.pims.alanolivares.clnsa_ot_w.Dialogos;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ActionBar;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Switch;
-import android.widget.TextView;
-
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.R;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Lanzas extends AppCompatActivity {

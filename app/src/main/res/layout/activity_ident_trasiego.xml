@@ -126,6 +126,7 @@
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="Etiqueta"
+                    android:maxLength="10"
                     android:background="@drawable/edittext"
                     android:textAlignment="center"
                     android:layout_weight="1"

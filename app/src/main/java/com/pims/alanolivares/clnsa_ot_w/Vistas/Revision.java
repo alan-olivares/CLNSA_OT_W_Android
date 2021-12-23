@@ -95,8 +95,6 @@ public class Revision extends ClasePadreFragment {
                     }
                 }
             });
-            bottomSheet.setContentView(vista);
-            bottomSheet.show();
         }catch (Exception e){
             getFunciones().mostrarMensaje(e.getMessage());
         }

@@ -61,8 +61,6 @@ public class Montacargas extends ClasePadreFragment {
     @Override
     public void proceso(int index, View vista, BottomSheetDialog bottomSheet) {
         super.proceso(index, vista, bottomSheet);
-        bottomSheet.setContentView(vista);
-        bottomSheet.show();
         ProgressBar progress=vista.findViewById(R.id.progressDR);
         try{
             JSONArray jsonA=getFunciones().getJsonLocal("select OP.Cantidad,OP.Fecha,C.Codigo as Uso,E.Codigo as Edad, B.Nombre as Bodega " +
@@ -100,9 +98,7 @@ public class Montacargas extends ClasePadreFragment {
                         getFunciones().ejecutarComLocal("update PR_Orden set estatus=3 where IdOrden="+jsonArray.getJSONObject(index).getString("Orden"));
                         cargarDatos();
                         bottomSheet.dismiss();
-                    } catch (JSONException e) {
-                        getFunciones().mostrarMensaje("Problema al terminar la orden");
-                    } catch (Exception e) {
+                    }catch (Exception e) {
                         getFunciones().mostrarMensaje(e.getMessage());
                     }
                 }
@@ -136,6 +132,7 @@ public class Montacargas extends ClasePadreFragment {
         final MenuItem sincronizar=menu.findItem(R.id.sincronizar);
         final MenuItem reubicar=menu.findItem(R.id.reubicar);
         final MenuItem actualizarBod=menu.findItem(R.id.actualizarBod);
+        final MenuItem actualizarEst=menu.findItem(R.id.actualizarEst);
         sincronizar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -159,6 +156,13 @@ public class Montacargas extends ClasePadreFragment {
                 return false;
             }
         });
+        actualizarEst.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                new Inventario().sincEstructura(getContext(),getFunciones());
+                return false;
+            }
+        });
     }
 
     private void sincronizar(){
@@ -168,11 +172,11 @@ public class Montacargas extends ClasePadreFragment {
             public void run() {
                 try {
                     guardarProgreso();
-                    JSONArray jsonArray=getFunciones().consultaJson("select * from PR_Orden where Estatus in (1,2)",SQLConnection.db_AAB);
+                    JSONArray jsonArray=getFunciones().consultaJson("select IdOrden,IdTipoOp,IdLote,IdAlmacen,IdArea,IdSeccion,IdOperario,IdOperarioMon,IdSupervisor,Fecha,Estatus,IdUsuario from PR_Orden where Estatus in (1,2)",SQLConnection.db_AAB);
                     getFunciones().actualizarSQLLocal("PR_Orden",jsonArray,true);
-                    jsonArray=getFunciones().consultaJson("select O.* from PR_Op O inner join PR_Orden P on P.IdOrden=O.IdOrden where P.Estatus in (1,2)",SQLConnection.db_AAB);
+                    jsonArray=getFunciones().consultaJson("select O.IdOperacion,O.IdOrden,O.Cantidad,O.Estatus,O.Fecha,O.IdAlcohol,O.IdCodificacion,O.IdTanque,O.IdLote,O.AreaID,O.SeccionID from PR_Op O inner join PR_Orden P on P.IdOrden=O.IdOrden where P.Estatus in (1,2)",SQLConnection.db_AAB);
                     getFunciones().actualizarSQLLocal("PR_Op",jsonArray,true);
-                    jsonArray=getFunciones().consultaJson("select D.* from PR_OperaDetail D inner join PR_Op O on D.IdOperacion=O.IdOperacion inner join PR_Orden P on P.IdOrden=O.IdOrden where P.Estatus in (1,2)",SQLConnection.db_AAB);
+                    jsonArray=getFunciones().consultaJson("select D.IdOperaDetail,D.IdOperacion,D.IdBarrica,D.Capacidad,D.Estatus from PR_OperaDetail D inner join PR_Op O on D.IdOperacion=O.IdOperacion inner join PR_Orden P on P.IdOrden=O.IdOrden where P.Estatus in (1,2)",SQLConnection.db_AAB);
                     getFunciones().actualizarSQLLocal("PR_OperaDetail",jsonArray,true);
                     getFunciones().mostrarMensaje("Los cambios se han cargado correctamente");
                     cargarDatos();
@@ -183,7 +187,6 @@ public class Montacargas extends ClasePadreFragment {
                 }
             }
         });
-
     }
 
     private void guardarProgreso() throws Exception{

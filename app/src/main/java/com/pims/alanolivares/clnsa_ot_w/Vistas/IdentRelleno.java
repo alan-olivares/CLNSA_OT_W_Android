@@ -140,7 +140,7 @@ public class IdentRelleno extends ClasePadre {
         columnModel.setColumnWidth(3,130);
         columnModel.setColumnWidth(4,130);
         dataTable.setColumnModel(columnModel);
-        setCopyEtiqueta(dataTable);
+        setCopyEtiqueta(dataTable,0);
         dataTable.setHeaderAdapter(new SimpleTableHeaderAdapter(this,spaceProbeHeaders));
     }
     private void cambiarEstado(){

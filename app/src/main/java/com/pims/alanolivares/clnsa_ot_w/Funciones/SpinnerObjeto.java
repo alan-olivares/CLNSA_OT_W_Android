@@ -1,5 +1,15 @@
 package com.pims.alanolivares.clnsa_ot_w.Funciones;
 
+
+/**
+ * <p>Objeto que almacena los pares clave-valor que se usan en los Spinner
+ * encontrados dentro de la aplicación
+ * </p>
+ *
+ * @author Alan Israel Olivares Mora
+ * @version v1.0
+ *
+ */
 public class SpinnerObjeto {
     int id;
     String valor;
@@ -24,7 +34,7 @@ public class SpinnerObjeto {
     public void setValor(String valor) {
         this.valor = valor;
     }
-    //to display object as a string in spinner
+
     @Override
     public String toString() {
         return valor;
@@ -33,9 +43,8 @@ public class SpinnerObjeto {
     public boolean equals(Object obj) {
         if(obj instanceof SpinnerObjeto){
             SpinnerObjeto c = (SpinnerObjeto )obj;
-            if(c.getValor().equals(valor) && c.getId()==id ) return true;
+            return (c.getValor().equals(valor) && c.getId()==id);
         }
-
         return false;
     }
 

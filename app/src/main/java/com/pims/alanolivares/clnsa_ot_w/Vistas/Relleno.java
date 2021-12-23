@@ -60,8 +60,6 @@ public class Relleno extends ClasePadreFragment {
         TextView titulo=vista.findViewById(R.id.descripcion_titulo);
         titulo.setText("Orden: "+barriles[index][0]);
         ProgressBar progress=vista.findViewById(R.id.progressDR);
-        bottomSheet.setContentView(vista);
-        bottomSheet.show();
         progress.post(new Runnable() {
             @Override
             public void run() {

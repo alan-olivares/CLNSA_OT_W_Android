@@ -35,7 +35,7 @@ public class AvanceOrden extends ClasePadre {
     }
     private void inicializar(){
         dataTable=findViewById(R.id.tablaAO);
-        setCopyEtiqueta(dataTable);
+        setCopyEtiqueta(dataTable,0);
         cantidad=findViewById(R.id.totalAO);
         progressBar=findViewById(R.id.progressAO);
         String[] spaceProbeHeaders={"Etiqueta","Tapa","Uso","Litros"};

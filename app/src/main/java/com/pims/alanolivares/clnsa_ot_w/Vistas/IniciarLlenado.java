@@ -103,7 +103,7 @@ public class IniciarLlenado extends ClasePadre {
         lanza2=findViewById(R.id.l2ILL);
         lanza3=findViewById(R.id.l3ILL);
         dataTable=findViewById(R.id.llenado_tableILL);
-        setCopyEtiqueta(dataTable);
+        setCopyEtiqueta(dataTable,0);
         progressBar=findViewById(R.id.progressILL);
         String[] spaceProbeHeaders={"Etiqueta","Tapa","Uso","Lanza"};
         dataTable.setHeaderAdapter(new SimpleTableHeaderAdapter(this,spaceProbeHeaders));

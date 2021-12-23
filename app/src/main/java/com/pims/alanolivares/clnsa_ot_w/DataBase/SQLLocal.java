@@ -4,10 +4,18 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * <p>Clase que extiende SQLiteOpenHelper la cual permite almacenar información en
+ * una base de datos interna del dispositivo
+ * </p>
+ *
+ * @author Alan Israel Olivares Mora
+ * @version v1.0
+ *
+ */
 public class SQLLocal  extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "AAB_CLNSA.db";
-    public static final String MAIN_TABLES[]={"CM_Alcohol","CM_CodEdad","CM_Codificacion","CM_EstadoLote","CM_Edad"};
 
     public SQLLocal(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -16,8 +24,6 @@ public class SQLLocal  extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS AA_Almacen(AlmacenID int NOT NULL,Nombre varchar(30),Descripcion varchar(50),Consecutivo int NOT NULL,PlantaID int )");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS AA_Area(AreaId bigint NOT NULL,AlmacenId int NOT NULL,Nombre varchar(30),Consecutivo int NOT NULL)");
-        //sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS AA_Impresion(Idimpresion bigint NOT NULL,IdPlanta tinyint,IdRecurso tinyint,IdAsText nchar(10))");
-        //sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS AA_ImpresionHist(IdReimpresion bigint NOT NULL,Idimpresion bigint,IDUSUARIO int,Fecha datetime)");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS AA_Nivel(NivelID int NOT NULL,PosicionId int NOT NULL,Nombre varchar(30),Consecutivo int NOT NULL)");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS AA_Plantas(PlantaID int NOT NULL,Nombre varchar(30),Descripcion varchar(50),Consecutivo int NOT NULL)");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS AA_Posicion(PosicionID int NOT NULL,SeccionID int NOT NULL,Nombre varchar(30),Consecutivo int NOT NULL)");
@@ -27,7 +33,6 @@ public class SQLLocal  extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS CM_Codificacion(IdCodificacion int NOT NULL,Codigo varchar(30),Descripcion varchar(50))");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS CM_Edad(IdEdad int,Codigo varchar(20),Descripcion varchar(50))");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS CM_EstadoLote(IdEstadoLote int NOT NULL,Descripcion varchar(50))");
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS CM_Grupo(idGrupo int NOT NULL,Nombre varchar(80))");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS CM_MovtoOp(IdMovtoOP bigint NOT NULL,IdTipoOp bigint NOT NULL,Descripcion varchar(50))");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS CM_Planta(IdPlanta tinyint NOT NULL,Descripcion varchar(120))");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS CM_Proveedor(IdProveedor int NOT NULL,Codigo varchar(30),Descripcion varchar(50))");

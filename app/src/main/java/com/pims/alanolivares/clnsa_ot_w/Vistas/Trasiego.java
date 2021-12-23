@@ -63,8 +63,6 @@ public class Trasiego extends ClasePadreFragment {
         ProgressBar progress=vista.findViewById(R.id.progressDR);
         TextView titulo=vista.findViewById(R.id.descripcion_titulo);
         Button continuar = vista.findViewById(R.id.continuar);
-        bottomSheet.setContentView(vista);
-        bottomSheet.show();
         progress.post(new Runnable() {
             @Override
             public void run() {

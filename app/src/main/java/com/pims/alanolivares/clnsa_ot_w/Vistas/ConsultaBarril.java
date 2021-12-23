@@ -46,7 +46,7 @@ public class ConsultaBarril extends ClasePadre {
         relleno=findViewById(R.id.rellenoCB);
         ubicacion=findViewById(R.id.ubicacionCB);
         tabla=findViewById(R.id.tablaCB);
-        setCopyEtiqueta(tabla);
+        setCopyEtiqueta(tabla,0);
         camara=findViewById(R.id.camaraCB);
         etiqueta=findViewById(R.id.etiquetaCB);
         aceptar=findViewById(R.id.aceptarCB);

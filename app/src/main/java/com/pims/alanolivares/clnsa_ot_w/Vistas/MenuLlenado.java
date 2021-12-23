@@ -105,7 +105,7 @@ public class MenuLlenado extends ClasePadre {
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("¿Estás seguro de de dar de baja la recepción actual del tanque "+tanque+"?").setPositiveButton("Si", dialogClickListener)
+        builder.setMessage("¿Estás seguro de dar de baja la recepción actual del tanque "+tanque+"?").setPositiveButton("Si", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }
 }

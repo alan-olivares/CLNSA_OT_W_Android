@@ -9,4 +9,7 @@
     <item
         android:id="@+id/actualizarBod"
         android:title="Actualizar bodega" />
+    <item
+        android:id="@+id/actualizarEst"
+        android:title="Actualizar estructura" />
 </menu>

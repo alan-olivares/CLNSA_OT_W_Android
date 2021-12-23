@@ -43,6 +43,7 @@ public class Reparacion extends ClasePadreFragment {
         inicializar(view);
         setEtiqueta(etiqueta);
         setCamara(camara);
+        setTitle("Reparación de barriles");
         setHasOptionsMenu(true);
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +78,7 @@ public class Reparacion extends ClasePadreFragment {
                 getFunciones().llenarSpinner("Select idedad as id,codigo as valor from CM_Edad",edad);
                 progressBar.setVisibility(View.GONE);
             }
-        },1000);
+        },500);
 
     }
     private void continuar(){
@@ -114,18 +115,16 @@ public class Reparacion extends ClasePadreFragment {
                         JSONArray jsonArray=getFunciones().consultaJson("exec sp_BarrilIdentidad_v2 '"+eti+"'", SQLConnection.db_AAB);
                         JSONObject jsonObject=jsonArray.getJSONObject(0);
                         barril.setText("Barril: "+eti);
-                        uso.setSelection(jsonObject.getInt("idcodificacion"));
-                        edad.setSelection(jsonObject.getInt("idedad"));
-                        annio.setText(jsonObject.getString("año"));
                         mensaje.setText(jsonObject.getString("mensaje"));
-                        idBarrica=jsonObject.getString("idbarrica");
-                        if(jsonObject.getString("mensaje").equals("")){
+                        if(!jsonObject.getString("mensaje").equals("¡Barril no encontrado!")){
                             toggleButtons(false);
-                            uso.setEnabled(true);
-                            edad.setEnabled(true);
-                            annio.setEnabled(true);
-                        }else{
-                            toggleButtons(false);
+                            uso.setEnabled(jsonObject.getString("mensaje").equals(""));
+                            edad.setEnabled(jsonObject.getString("mensaje").equals(""));
+                            annio.setEnabled(jsonObject.getString("mensaje").equals(""));
+                            uso.setSelection(jsonObject.getInt("idcodificacion"));
+                            edad.setSelection(jsonObject.getInt("idedad"));
+                            annio.setText(jsonObject.getString("año"));
+                            idBarrica=jsonObject.getString("idbarrica");
                         }
                     } catch (Exception e) {
                         getFunciones().mostrarMensaje(e.getMessage());

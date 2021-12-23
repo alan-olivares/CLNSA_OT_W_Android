@@ -42,16 +42,18 @@
                 android:gravity="center"
                 android:weightSum="3"
                 android:orientation="horizontal">
+
                 <EditText
                     android:id="@+id/etiquetaILL"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext"
                     android:ems="10"
                     android:hint="Etiqueta"
-                    android:background="@drawable/edittext"
-                    android:textAlignment="center"
-                    android:layout_weight="1"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:textAlignment="center" />
 
                 <Button
                     android:id="@+id/camaraILL"

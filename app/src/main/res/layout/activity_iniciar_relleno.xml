@@ -50,6 +50,7 @@
                     android:hint="Etiqueta"
                     android:background="@drawable/edittext"
                     android:textAlignment="center"
+                    android:maxLength="10"
                     android:layout_weight="1"
                     android:inputType="number" />
 

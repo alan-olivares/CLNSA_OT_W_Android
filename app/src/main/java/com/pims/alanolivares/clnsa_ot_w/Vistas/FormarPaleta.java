@@ -69,7 +69,7 @@ public class FormarPaleta extends ClasePadre {
         columnModel.setColumnWidth(0,150);
         columnModel.setColumnWidth(2,120);
         dataTable.setColumnModel(columnModel);
-        setCopyEtiqueta(dataTable);
+        setCopyEtiqueta(dataTable,0);
     }
     String tabla[][];
     private void cargarBarriles(){

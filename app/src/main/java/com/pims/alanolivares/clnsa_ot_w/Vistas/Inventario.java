@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadreFragment;
+import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.SpinnerObjeto;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
@@ -62,9 +63,9 @@ public class Inventario extends ClasePadreFragment {
         View view=inflater.inflate(R.layout.fragment_inventario, container, false);
         setTitle("Inventario");
         inicializar(view);
-
         return view;
     }
+
     private void inicializar(View view){
         estructura=view.findViewById(R.id.estructuraI);
         bodega=view.findViewById(R.id.bodegasI);
@@ -73,7 +74,7 @@ public class Inventario extends ClasePadreFragment {
         estructura.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sincEstructura();
+                sincEstructura(getContext(),getFunciones());
             }
         });
         bodega.setOnClickListener(new View.OnClickListener() {
@@ -100,22 +101,22 @@ public class Inventario extends ClasePadreFragment {
     }
     String canalID = "my_channel_id_01";
     int notificationID = 100;
-    private void sincEstructura(){
+    public void sincEstructura(Context context, FuncionesGenerales func){
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         int PROGRESS_MAX=consultas.length;
-                        if(!getFunciones().isThread("TBRE_Sinc")){
-                            iniciarNotifi(PROGRESS_MAX);
+                        if(!func.isThread("TBRE_Sinc")){
+                            iniciarNotifi(PROGRESS_MAX,context,func);
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
                                     try {
                                         for(int x=0;x<consultas.length;x++){
-                                            JSONArray jsonArray=getFunciones().consultaJson(consultas[x][0], SQLConnection.db_AAB);
-                                            getFunciones().actualizarSQLLocal(consultas[x][1],jsonArray,true);
+                                            JSONArray jsonArray=func.consultaJson(consultas[x][0], SQLConnection.db_AAB);
+                                            func.actualizarSQLLocal(consultas[x][1],jsonArray,true);
                                             builderNoti.setProgress(PROGRESS_MAX, x, false);
                                             notificationManager.notify(notificationID, builderNoti.build());
                                         }
@@ -131,7 +132,7 @@ public class Inventario extends ClasePadreFragment {
                                 }
                             }).start();
                         }else{
-                            getFunciones().mostrarMensaje("Hay una descarga en proceso, espera a que se finalice");
+                            func.mostrarMensaje("Hay una descarga en proceso, espera a que se finalice");
                         }
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -140,24 +141,24 @@ public class Inventario extends ClasePadreFragment {
                 }
             }
         };
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Se iniciará la carga del diseño de bodegas, ¿deseas continuar?").setPositiveButton("Si", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }
 
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builderNoti;
-    private void iniciarNotifi(int max){
+    private void iniciarNotifi(int max,Context context,FuncionesGenerales func){
         notificationID++;
-        getFunciones().createNotificationChannel(canalID);
-        notificationManager = NotificationManagerCompat.from(getContext());
-        builderNoti = new NotificationCompat.Builder(getContext(), canalID);
+        func.createNotificationChannel(canalID);
+        notificationManager = NotificationManagerCompat.from(context);
+        builderNoti = new NotificationCompat.Builder(context, canalID);
         builderNoti.setContentTitle("Bodegas")
                 .setContentText("Descarga en progreso...")
                 .setSmallIcon(R.drawable.tbre)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setProgress(max, 0, false);
-        getFunciones().mostrarMensaje("Descarga de estructura en bodegas iniciada");
+        func.mostrarMensaje("Descarga de estructura en bodegas iniciada");
         notificationManager.notify(notificationID, builderNoti.build());
     }
 

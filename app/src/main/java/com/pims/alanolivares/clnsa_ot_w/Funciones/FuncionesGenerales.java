@@ -1,61 +1,42 @@
 package com.pims.alanolivares.clnsa_ot_w.Funciones;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
-
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLLocal;
 import com.pims.alanolivares.clnsa_ot_w.R;
-import com.pims.alanolivares.clnsa_ot_w.Vistas.FormarPaleta;
 import com.pims.alanolivares.clnsa_ot_w.Vistas.Inicio;
 import com.pims.alanolivares.clnsa_ot_w.Vistas.LoginActivity;
-import com.pims.alanolivares.clnsa_ot_w.Vistas.MenuLateral;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -63,27 +44,45 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import kotlin.jvm.Throws;
-
+/**
+ * <p>Clase con la implementación de los metodos principales para el uso de la aplicación
+ * </p>
+ *
+ * @author Alan Israel Olivares Mora
+ * @version v1.0
+ *
+ */
 public class FuncionesGenerales {
+    /**
+     * Conexto que nos permite trabajar en cualquier vista en la que es llamada la clase
+     */
     static Context context;
+    /**
+     * Constructor de la clase que inicializa el Context
+     * @param context - Contexto de la vista en la que es llamada la clase
+     */
     public FuncionesGenerales(Context context){
         this.context=context;
     }
+    /**
+     * Método que autentica al usuario y asigna una número de pistola al dispositivo
+     *
+     * @param usuario - Campo de identificador del usuario
+     * @param contrasena - Campo de la contraseña del usuario
+     * @param pistola - Número de pistola con la que trabajará este dispositivo
+     * @return String - El resultado obtenido en la base de datos, 1 signifca que fue satisfactorio en inicio de sesión
+     */
     public String Login(String usuario,String contrasena,String pistola){
         String result= Login(usuario,contrasena);
         if(result.equals("1")){
@@ -95,6 +94,13 @@ public class FuncionesGenerales {
         }
         return result;
     }
+    /**
+     * Método que autentica al usuario (No necesita pistola)
+     *
+     * @param usuario - Campo de identificador del usuario
+     * @param contrasena - Campo de la contraseña del usuario
+     * @return String - El resultado obtenido en la base de datos, 1 signifca que fue satisfactorio en inicio de sesión
+     */
     public String Login(String usuario,String contrasena){
         try {
             String result="",nombre="",idUsuario="";
@@ -102,13 +108,12 @@ public class FuncionesGenerales {
             JSONObject jsonObject=jsonArray.getJSONObject(0);
             result=jsonObject.getString("msg");
             if(result.equals("1")){
-                jsonArray=consultaJson("select Nombre,IdUsuario from CM_Usuario where Clave='"+usuario+"'",SQLConnection.db_AAB);
+                jsonArray=consultaJson("select Nombre,IdUsuario,IdGrupo from CM_Usuario where Clave='"+usuario+"'",SQLConnection.db_AAB);
                 jsonObject=jsonArray.getJSONObject(0);
-                nombre=jsonObject.getString("nombre");
-                idUsuario=jsonObject.getString("idusuario");
                 SharedPreferences.Editor editor = context.getSharedPreferences("Usuarios", Context.MODE_PRIVATE).edit();
-                editor.putString("nombre", nombre);
-                editor.putString("idUsuario", idUsuario);
+                editor.putString("nombre", jsonObject.getString("nombre"));
+                editor.putString("idUsuario", jsonObject.getString("idusuario"));
+                editor.putString("idGrupo", jsonObject.getString("idgrupo"));
                 editor.commit();
             }
             return result;
@@ -120,7 +125,13 @@ public class FuncionesGenerales {
             return e.getMessage();
         }
     }
-
+    /**
+     * Método que inserta o actualiza información dentro de la base de datos
+     *
+     * @param consulta - Consulta que se realizará
+     * @param DB - Base de datos a la que accederá (Ver clase SQLConnection)
+     * @throws Exception - Lanza información del problema ocurrido
+     */
     public void insertaData(String consulta,String DB) throws Exception {
         if(!isOnlineNet())
             throw new Exception("La pistola no está conectada a la red");
@@ -142,7 +153,14 @@ public class FuncionesGenerales {
         }
 
     }
-
+    /**
+     * Método que consulta información en la base de datos y convierte dicha información en Json
+     *
+     * @param consulta - Consulta que se realizará
+     * @param DB - Base de datos a la que accederá (Ver clase SQLConnection)
+     * @throws Exception - Lanza información del problema ocurrido
+     * @return JSONArray - Consulta convertida en Json
+     */
     public JSONArray consultaJson(String consulta,String DB) throws Exception {
         if(!isOnlineNet())
             throw new Exception("La pistola no está conectada a la red");
@@ -178,6 +196,16 @@ public class FuncionesGenerales {
         }
 
     }
+    /**
+     * Método que consulta información en la base de datos y convierte dicha información en un
+     * array bi-dimencional
+     *
+     * @param consulta - Consulta que se realizará
+     * @param DB - Base de datos a la que accederá (Ver clase SQLConnection)
+     * @param llaves - Número de columnas deseadas (Obtendrá las columnas 0 hasta la variable llaves)
+     * @throws Exception - Lanza información del problema ocurrido
+     * @return String[][] - Consulta convertida en array bi-dimencional
+     */
     public String[][] consultaTabla(String consulta,String DB,int llaves) throws Exception {
         try{
             JSONArray jsonArray= consultaJson(consulta,DB);
@@ -188,6 +216,14 @@ public class FuncionesGenerales {
             throw e;
         }
     }
+    /**
+     * Método que convierte un JSONArray en un array bi-dimencional
+     *
+     * @param jsonArray - Datos de las tablas en forma de array
+     * @param llaves - Número de columnas deseadas (Obtendrá las columnas 0 hasta la variable llaves)
+     * @throws Exception - Lanza información del problema ocurrido
+     * @return String[][] - Consulta convertida en array bi-dimencional
+     */
     public String[][] consultaTabla(JSONArray jsonArray,int llaves) throws Exception {
         try{
             String matriz[][] = new String[jsonArray.length()][llaves];
@@ -196,21 +232,23 @@ public class FuncionesGenerales {
                     int i=0;
                     Iterator<String> keyItr = jsonArray.getJSONObject(x).keys();
                     JSONObject jsonObject=jsonArray.getJSONObject(x);
-                    while(keyItr.hasNext()) {
+                    while(keyItr.hasNext() && i<llaves) {
                         String key = keyItr.next();
-                        matriz[x][i]=jsonObject.getString(key);
-                        i++;
+                        matriz[x][i++]=jsonObject.getString(key);
                     }
 
                 }
             }
             return matriz;
         } catch (JSONException e) {
-            throw new Exception("Se gerneró un problema al convertir la información e JSON");
+            throw new Exception("Se gerneró un problema al convertir la información en JSON");
         } catch (Exception e) {
             throw e;
         }
     }
+    /**
+     * Método que permite cerrar sesión del usuario el cual elimina la información alamacenada por este
+     */
     public void cerrarSesion(){
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setMessage("¿Quieres cerrar sesión?");
@@ -237,24 +275,49 @@ public class FuncionesGenerales {
         AlertDialog aler = alert.create();
         aler.show();
     }
-
+    /**
+     * Método que verifica si el dispositivo está conectado al Wi-Fi
+     *
+     * @return Boolean
+     */
     public Boolean isOnlineNet() {
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return wifi.isConnected();
     }
+    /**
+     * Método que convierte un número de tipo String a un formato requerido dentro de la aplicación
+     *
+     * @param numero - Número a convertir
+     * @return String - Número con formato #,###.00
+     */
     public String formatNumber(String numero){
         double amount = Double.parseDouble(numero);
         DecimalFormat formatter = new DecimalFormat("#,###.00");
         return formatter.format(amount);
     }
+    /**
+     * Método que valida si la etiqueta ingresada por el usuario es correcta
+     *
+     * @param etiqueta - Etiqueta del barril
+     * @return boolean
+     */
     public boolean valEtiBarr(String etiqueta){
         return etiqueta.length()==10 && etiqueta.startsWith("0101");
     }
-
+    /**
+     * Método que muestra al usuario un mensaje en forma de toast
+     *
+     * @param mensaje - Mensaje a mostrar
+     */
     public void mostrarMensaje(String mensaje){
         Toast.makeText(context,mensaje,Toast.LENGTH_LONG).show();
     }
+    /**
+     * Método que permite activar los flujomentros para el llenado de barriles
+     *
+     * @throws Exception - Lanza información del problema ocurrido
+     */
     public void avtivarFlujometos() throws Exception{
         try{
             JSONArray jsonArray=consultaJson("select idlanza from CM_Lanza where Seleccion=1 order by IdLanza",SQLConnection.db_AAB);
@@ -282,6 +345,12 @@ public class FuncionesGenerales {
         }
 
     }
+    /**
+     * Método que registra los logs en archivos de texto dentro del dispositivo
+     *
+     * @param texto - Log a escribir
+     * @throws IOException - Lanza problema ocurrido al registrar la información
+     */
     public void escribirLog(String texto) throws IOException {
         String dia=getCurrDate("ddMMyyyy");
         File f = new File(Environment.getExternalStorageDirectory().getPath(), "TBRE/TBRElog_"+dia+".txt");
@@ -295,11 +364,22 @@ public class FuncionesGenerales {
             stream.close();
         }
     }
+    /**
+     * Método que obtiene la fecha actual del dispositivo en el formato solicitado
+     *
+     * @param formato - Formato en el que estará la fecha
+     * @return String - Fecha actual con el formato solicitado
+     */
     public String getCurrDate(String formato){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(formato);
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
     }
+    /**
+     * Método que resetea y elimina información de las procesos de llenado y relleno pasados
+     *
+     * @throws Exception - Lanza descripción del problema ocurrido
+     */
     public void resetProceso() throws Exception{
         try {
             insertaData("update cm_lanza set edollenada=estado, seleccion=0", SQLConnection.db_AAB);
@@ -308,15 +388,32 @@ public class FuncionesGenerales {
             throw new Exception("Se gerneró un problema al recetear el flujometro: "+e.getMessage());
         }
     }
+    /**
+     * Método que obtiene el ID del usuario con el que inició sesión
+     *
+     * @return String - ID del usuario
+     */
     public String getIdUsuario(){
         SharedPreferences preferences = context.getSharedPreferences("Usuarios",Context.MODE_PRIVATE);
         return preferences.getString("idUsuario","-1");
     }
+    /**
+     * Método que obtiene el número de pistola que se está usando en el dispositivo
+     *
+     * @return String - Pistola
+     */
     public String getPistola(){
         SharedPreferences preferences = context.getSharedPreferences("Usuarios",Context.MODE_PRIVATE);
         return preferences.getString("pistola","1");
     }
-
+    /**
+     * Método que permite al mostrarle al usuario un mensaje al usuario cuando ocurrió un
+     * problema y avisarle si desea intentar de nuevo el proceso, funciona de forma recursiva,
+     * el cual permite realizar un sin número de intentos
+     *
+     * @param consulta - Insert o Update que se requiere hacer
+     * @param conexion - Conexión de SQLConection
+     */
     public void reintentadoRegistro(String consulta,String conexion){
         try {
             insertaData(consulta,conexion);
@@ -337,12 +434,20 @@ public class FuncionesGenerales {
                     }
                 }
             };
-            builder.setMessage("Se generó un problema al registrar la información, por favor verifica tu conexión wifi. ¿Quieres intentar nuevamente?")
+            builder.setMessage("Se generó un problema al registrar la información: "+e.getMessage()+". ¿Quieres intentar nuevamente?")
                     .setPositiveButton("Si", dialogClickListener)
                     .setNegativeButton("No", dialogClickListener).show();
         }
     }
-
+    /**
+     * Método que llena un spinner de que es recibido como parametro con información de la
+     * base de datos, la consulta debe incluir un campo id y un campo valor, por ejemplo:
+     * select campo1 as id, campo2 as valor from tabla
+     *
+     * @param consulta - La consulta de datos que se requieren
+     * @param spinner - Spinner al cual se le agregará la información
+     * @return ArrayList<SpinnerObjeto> - Lista de objetos id-valor que se obtuvieron de la consulta
+     */
     public ArrayList llenarSpinner(String consulta, Spinner spinner){
         ArrayList<SpinnerObjeto> lista=new ArrayList<>();
         try {
@@ -354,10 +459,19 @@ public class FuncionesGenerales {
             ArrayAdapter<SpinnerObjeto> adapter = new ArrayAdapter<SpinnerObjeto>(context, android.R.layout.simple_spinner_dropdown_item, lista);
             spinner.setAdapter(adapter);
         } catch (Exception e) {
-            mostrarMensaje("Problema al cargar el sppiner");
+            mostrarMensaje("Problema al cargar el sppiner: "+e.getMessage());
         }
         return lista;
     }
+    /**
+     * Método que llena un spinner de que es recibido como parametro con información de los
+     * datos internos del dispositivo, la consulta debe incluir un campo id y un campo valor,
+     * por ejemplo: select campo1 as id, campo2 as valor from tabla
+     *
+     * @param consulta - La consulta de datos que se requieren
+     * @param spinner - Spinner al cual se le agregará la información
+     * @return ArrayList<SpinnerObjeto> - Lista de objetos id-valor que se obtuvieron de la consulta
+     */
     public ArrayList llenarSpinnerLocal(String consulta, Spinner spinner){
         ArrayList<SpinnerObjeto> lista=new ArrayList<>();
         try {
@@ -369,18 +483,22 @@ public class FuncionesGenerales {
             ArrayAdapter<SpinnerObjeto> adapter = new ArrayAdapter<SpinnerObjeto>(context, android.R.layout.simple_spinner_dropdown_item, lista);
             spinner.setAdapter(adapter);
         } catch (Exception e) {
-            mostrarMensaje("Problema al cargar el sppiner");
+            mostrarMensaje("Problema al cargar el sppiner: "+e.getMessage());
         }
         return lista;
     }
-
+    /**
+     * Método que obtiene información de la base de datos interna y es convertida a JSONArray
+     *
+     * @param consulta - La consulta de datos que se requieren
+     * @return JSONArray - Datos de la consulta solicitada
+     */
     public JSONArray getJsonLocal(String consulta){
         JSONArray jsonArray=new JSONArray();
         SQLLocal myhelper=new SQLLocal(context);
         SQLiteDatabase db = myhelper.getWritableDatabase();
         Cursor cursor =db.rawQuery(consulta,null);
-        while (cursor.moveToNext())
-        {
+        while (cursor.moveToNext()){
             JSONObject jsonObject=new JSONObject();
             for(int x=0;x<cursor.getColumnCount();x++){
                 try {
@@ -396,6 +514,11 @@ public class FuncionesGenerales {
         cursor.close();
         return jsonArray;
     }
+    /**
+     * Método que ejecuta Updates o Inserts dentro de la base de datos interna
+     *
+     * @param consulta - La consulta requerida por el usuario
+     */
     public void ejecutarComLocal(String consulta){
         SQLLocal myhelper=new SQLLocal(context);
         SQLiteDatabase db = myhelper.getWritableDatabase();
@@ -403,6 +526,14 @@ public class FuncionesGenerales {
         db.close();
         myhelper.close();
     }
+    /**
+     * Método que registra nuevos datos en las tablas internas del dispositivo
+     *
+     * @param tabla - El nombre de la tabla a la cual le surgiran los efectos
+     * @param datos - JSONArray con los nuevos datos
+     * @param borrar - True si se requiere que los viejos datos de toda la tabla sean borrados
+     *               (La tabla wm_barril se recomienda borrar por id de bodega)
+     */
     public void actualizarSQLLocal(String tabla,JSONArray datos,boolean borrar){
         SQLLocal myhelper=new SQLLocal(context);
         SQLiteDatabase db = myhelper.getWritableDatabase();
@@ -425,6 +556,11 @@ public class FuncionesGenerales {
         db.close();
         myhelper.close();
     }
+    /**
+     * Método que borra todos los registros de alguna tabla requerida
+     *
+     * @param tabla - El nombre de la tabla que se vaciará
+     */
     public void borrarRegistros(String tabla){
         SQLLocal myhelper=new SQLLocal(context);
         SQLiteDatabase db = myhelper.getWritableDatabase();
@@ -432,6 +568,11 @@ public class FuncionesGenerales {
         db.close();
         myhelper.close();
     }
+    /**
+     * Método que crea el canal requerido para las notificaciones
+     *
+     * @param canalID - El nombre del canal
+     */
     public void createNotificationChannel(String canalID) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = context.getString(R.string.app_name);
@@ -443,25 +584,25 @@ public class FuncionesGenerales {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
+    /**
+     * Método que verifica si el servidor responde a un ping
+     *
+     * @return boolean
+     */
     public boolean servidorActivo(){
         Runtime runtime = Runtime.getRuntime();
-        try
-        {
+        try{
             Process  mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 "+SQLConnection.ip);
             int mExitValue = mIpAddrProcess.waitFor();
             return mExitValue==0;
         }
-        catch (InterruptedException ignore)
-        {
-            return false;
-        }
-        catch (IOException e)
-        {
+        catch (Exception ignore){
             return false;
         }
     }
-
+    /**
+     * Método que perimite activar el tracking de notificaciones entrantes
+     */
     public void activarNotificaciones(){
         //Se revisa si ya está corriendo el proceso
         Thread TBRE=getThread("TBRE_Notifi");
@@ -473,12 +614,21 @@ public class FuncionesGenerales {
         Timer timer = new Timer("TBRE_Notifi",true);
         timer.schedule(new revisarNotificaciones(), 5000, 5000);
     }
+    /**
+     * Método que perimite desactivar el tracking de notificaciones entrantes
+     */
     public void desactivarNotificaciones(){
         //Se revisa si ya está corriendo el proceso
         Thread TBRE=getThread("TBRE_Notifi");
         if(TBRE!=null)
             TBRE.interrupt();
     }
+    /**
+     * Método que perimite buscar algún hilo que se encuentre corriendo dentro del dispositivo
+     *
+     * @param nombre - Nombre del hilo solicitado
+     * @return Thread - Hilo que se requiere o null sino fue encontrado
+     */
     public Thread getThread(String nombre){
         Set<Thread> lista= Thread.getAllStackTraces().keySet();
         for(Thread hilo:lista){
@@ -487,6 +637,12 @@ public class FuncionesGenerales {
         }
         return null;
     }
+    /**
+     * Método que perimite buscar si el hilo existe
+     *
+     * @param nombre - Nombre del hilo solicitado
+     * @return boolean
+     */
     public boolean isThread(String nombre){
         Set<Thread> lista= Thread.getAllStackTraces().keySet();
         for(Thread hilo:lista){
@@ -495,6 +651,13 @@ public class FuncionesGenerales {
         }
         return false;
     }
+    /**
+     * Método que verifica si la hora del dispositivo es la misma a la hora del servidor,
+     * sino lo fuera, aparecerá un mensaje mencionando cual es la hora correcta y cerrará la aplicación
+     * así como retornar false para que el hilo principal no continue con su proceso habitual
+     *
+     * @return boolean
+     */
     public boolean horaCorrecta(){
         try {
             JSONArray hora=consultaJson("select FORMAT (getdate(), 'yyyy-MM-dd HH:mm:ss') as fecha",SQLConnection.db_AAB);
@@ -525,7 +688,23 @@ public class FuncionesGenerales {
             return false;
         }
     }
-
+    /**
+     * <p>Clase que extiende de TimerTask la cual estará verificando si existen notificaciones
+     * dentro del servidor
+     * </p>
+     * <p>
+     * La clase contiene métodos:
+     * <ul>
+     * <li>crearNotificacion</li>
+     * <li>run</li>
+     * </ul>
+     * </p>
+     *
+     *
+     * @author Alan Istael Olivares Mora
+     * @version v1.0
+     *
+     */
     private class revisarNotificaciones extends TimerTask {
         private String canalID = "my_channel_id_01";
         private void crearNotificacion(int tipo,String titulo, String mensaje,int id){

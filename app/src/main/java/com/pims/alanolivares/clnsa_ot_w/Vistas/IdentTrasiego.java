@@ -87,7 +87,7 @@ public class IdentTrasiego extends ClasePadre {
         columnModel.setColumnWidth(3,140);
         dataTable.setColumnModel(columnModel);
         dataTable.setHeaderAdapter(new SimpleTableHeaderAdapter(this,spaceProbeHeaders));
-        setCopyEtiqueta(dataTable);
+        setCopyEtiqueta(dataTable,0);
     }
     private void agregarBarril(){
         progressBar.setVisibility(View.VISIBLE);

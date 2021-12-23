@@ -5,6 +5,7 @@ import com.pims.alanolivares.clnsa_ot_w.R;
 
 import android.Manifest;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -14,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -72,23 +74,12 @@ public class MenuLateral extends AppCompatActivity implements NavigationView.OnN
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         actionBarDrawerToggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
-        fragmentManager=getSupportFragmentManager();
-        //int caso=getIntent().getIntExtra("caso",0);
-        int caso=0;
-        fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contenedor, (Fragment) paginas[caso]);
-        fragmentTransaction.commit();
-        navigationView.post(new Runnable() {
-            @Override
-            public void run() {
-                navigationView.setCheckedItem(vistas[caso]);
-            }
-        });
-
+        preparaMenu();
         View hView = navigationView.getHeaderView(0);
         float ver=0;
         String version1="";
@@ -108,7 +99,41 @@ public class MenuLateral extends AppCompatActivity implements NavigationView.OnN
         nombres.setText("Usuario: "+nombre);
         version.setText("Versión: "+version1);
         pistola.setText("Pistola #"+pistolas);
-        configurarPrimerUso();
+        //configurarPrimerUso();
+    }
+    private void preparaMenu(){
+        String grupo=getGrupo();
+        //int caso=getIntent().getIntExtra("caso",0);
+        int caso=0;
+        Menu  menu=navigationView.getMenu();
+        fragmentManager=getSupportFragmentManager();
+        if(grupo.equals("1")||grupo.equals("2")){
+            caso=0;
+        }else{
+            caso=6;
+            menu.removeItem(R.id.llenado);
+            menu.removeItem(R.id.relleno);
+            menu.removeItem(R.id.trasiego);
+            menu.removeItem(R.id.trasiegoHo);
+            menu.removeItem(R.id.reparacion);
+            menu.removeItem(R.id.revision);
+            menu.removeItem(R.id.inventario);
+        }
+        fragmentTransaction=fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.contenedor, (Fragment) paginas[caso]);
+        fragmentTransaction.commit();
+        int finalCaso = caso;
+        navigationView.post(new Runnable() {
+            @Override
+            public void run() {
+                navigationView.setCheckedItem(vistas[finalCaso]);
+            }
+        });
+    }
+
+    private String getGrupo(){
+        SharedPreferences preferences = getSharedPreferences("Usuarios", Context.MODE_PRIVATE);
+        return preferences.getString("idGrupo","1");
     }
 
 
@@ -131,26 +156,6 @@ public class MenuLateral extends AppCompatActivity implements NavigationView.OnN
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
-    }
-    private void configurarPrimerUso(){
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE )
-                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE )
-                == PackageManager.PERMISSION_GRANTED ){
-            File f = new File(Environment.getExternalStorageDirectory().getPath(), "TBRE");
-            try {
-                if(!f.exists()){
-                    Files.createDirectory(Paths.get(f.getPath()));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
-            Toast.makeText(this,"Se necesitan permisos de archivos para escribir los logs",Toast.LENGTH_LONG).show();
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        }
-
     }
 
     @Override
