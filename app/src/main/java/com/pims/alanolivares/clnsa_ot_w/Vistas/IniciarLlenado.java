@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,7 +70,7 @@ public class IniciarLlenado extends ClasePadre {
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                agregarBarril(IdLote);
+                insertaEtiqueta(etiqueta.getText().toString());
             }
         });
         desactivarLan.setOnClickListener(new View.OnClickListener() {
@@ -112,15 +113,16 @@ public class IniciarLlenado extends ClasePadre {
         dataTable.setColumnModel(columnModel);
         //cargarBarriles();
     }
-    private void agregarBarril(String idLote){
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String eti=etiqueta.getText().toString();
-                    if(getFunciones().valEtiBarr(eti)){
-                        JSONArray jsonArray=getFunciones().consultaJson("EXEC sp_ll_Existe '"+idLote+"','"+eti+"'", SQLConnection.db_AAB);
+    @Override
+    public void validaEtiqueta(String eti) {
+        try {
+            super.validaEtiqueta(eti);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONArray jsonArray=getFunciones().consultaJson("EXEC sp_ll_Existe_v2 '"+IdLote+"','"+eti+"'", SQLConnection.db_AAB);
                         if(jsonArray.length()>0){
                             JSONObject jsonObject=jsonArray.getJSONObject(0);
                             if(jsonObject.getString("mensaje").equals("")){
@@ -137,23 +139,25 @@ public class IniciarLlenado extends ClasePadre {
                                     toggleButtons(jsonObject.getString("total").equals("0"));
                                     cargarBarriles();
                                 }else{
+                                    getFunciones().makeErrorSound();
                                     getFunciones().mostrarMensaje("Error al crear número de tapa");
                                 }
                             }else{
+                                getFunciones().makeErrorSound();
                                 getFunciones().mostrarMensaje(jsonObject.getString("mensaje"));
                             }
                         }
-                    }else{
-                        getFunciones().mostrarMensaje("Etiqueta invalida");
+                    }catch (Exception e){
+                        getFunciones().mostrarMensaje(e.getMessage());
+                    }finally {
+                        progressBar.setVisibility(View.GONE);
                     }
-                    etiqueta.setText("");
-                }catch (Exception e){
-                    getFunciones().mostrarMensaje(e.getMessage());
-                }finally {
-                    progressBar.setVisibility(View.GONE);
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }
+
 
 
     }
@@ -165,13 +169,13 @@ public class IniciarLlenado extends ClasePadre {
             getFunciones().avtivarFlujometos();
             for (int x=0;x<jsonBarriles.length();x++){
                 JSONObject jsonObject=jsonBarriles.getJSONObject(x);
-                getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss") + "|" + jsonObject.getString("etiqueta") + "|" + jsonObject.getString("tapa") + "|" + jsonObject.getString("lanza") + "|1");
+                System.out.println(jsonObject.toString());
+                getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss") + "|" + jsonObject.getString("etiqueta") + "|" + jsonObject.getString("tapa") + "|" + jsonObject.getString("lanza") + "|11");
             }
             timer = new Timer();
             timer.schedule(new revisarFlujometros(), 2000, 1000);
         }else{
-            terminarBombeo("2");
-            getFunciones().insertaData("update COM_TagsActual set Valor=0 where idtag in (6,9,12)",SQLConnection.db_Emba);
+            terminarBombeo();
         }
     }
     private boolean obtenerLanDisp(){
@@ -182,36 +186,36 @@ public class IniciarLlenado extends ClasePadre {
             return false;
         }
     }
-    public void terminarBombeo(String tipo) throws Exception{
-        timer.cancel();
-        getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss") + "|" + lanza1.getText().toString() + "|" + lanza2.getText().toString()  + "|" + lanza3.getText().toString()  + "|"+tipo);
-        JSONArray jsonArray=getFunciones().consultaJson("select '0101' + right('000000' + cast(B.Consecutivo as varchar(6)),6) as etiqueta, O.NoTapa, F.FlujoTotal from pr_opllenado O join WM_Barrica B ON O.IdBarrica=B.IdBarrica join CM_Lanza F on O.IdLanza=F.IdLanza", SQLConnection.db_AAB);
-        for (int x=0;x<jsonArray.length();x++){
-            JSONObject jsonObject=jsonArray.getJSONObject(x);
-            getFunciones().insertaData("exec sp_ValidaEtiLlen '"+IdLote+"','"+getFunciones().getCurrDate("yyyy-MM-dd")+"','"+usuario+"','"+jsonObject.getString("etiqueta")+"','"+jsonObject.getString("notapa")+"','"+jsonObject.getString("flujototal")+"'",SQLConnection.db_AAB);
-        }
-        jsonArray=getFunciones().consultaJson("select idbarrica, Notapa,IdLanza from pr_opllenado", SQLConnection.db_AAB);
-        for (int x=0;x<jsonArray.length();x++){
-            JSONObject jsonObject=jsonArray.getJSONObject(x);
-            getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss") + "|Registro: " + jsonObject.getString("idbarrica") + "|" + jsonObject.getString("notapa") + "|" + jsonObject.getString("idlanza") + "|11");
-        }
-        getFunciones().insertaData("update cm_lanza set edollenada=estado, seleccion=0",SQLConnection.db_AAB);
-        getFunciones().insertaData("delete pr_opllenado",SQLConnection.db_AAB);
-        getFunciones().insertaData("update COM_TagsActual set Valor=0 where idtag in (4,7,10)",SQLConnection.db_Emba);
+    public void terminarBombeo(){
+        if(timer!=null)
+            timer.cancel();
         iniciarBom.post(new Runnable() {
             @Override
             public void run() {
-                iniciarBom.setText("Iniciar bombeo");
-                iniciarBom.setBackgroundColor(ContextCompat.getColor(IniciarLlenado.this,R.color.verde_claro) );
                 try {
-                    cargarBarriles();
-                    cargarLanzas();
+                    getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss") + "|" + lanza1.getText().toString() + "|" + lanza2.getText().toString()  + "|" + lanza3.getText().toString()  + "|11");
                 }catch (Exception e){
-                    getFunciones().mostrarMensaje("Problema al cargar lanzas, error: "+e.getMessage());
+                    getFunciones().mostrarMensaje(e.getMessage());
                 }
+                getFunciones().reintentadoRegistro("Exec sp_llen_Registra '" + IdLote + "','" + usuario + "'", SQLConnection.db_AAB, new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            getFunciones().insertaData("update cm_lanza set edollenada=estado, seleccion=0",SQLConnection.db_AAB);
+                            //getFunciones().insertaData("delete pr_opllenado",SQLConnection.db_AAB);
+                            getFunciones().insertaData("update COM_TagsActual set Valor=0 where idtag in (4,7,10,6,9,12)",SQLConnection.db_Emba);
+                            iniciarBom.setText("Iniciar bombeo");
+                            iniciarBom.setBackgroundColor(ContextCompat.getColor(IniciarLlenado.this,R.color.verde_claro) );
+                            cargarBarriles();
+                            cargarLanzas();
+                            getFunciones().mostrarMensaje("Bombeo terminado correctamente");
+                        }catch (Exception e){
+                            getFunciones().mostrarMensaje(e.getMessage());
+                        }
+                    }
+                });
             }
         });
-
     }
     JSONArray jsonBarriles;
     private void cargarBarriles(){
@@ -234,10 +238,13 @@ public class IniciarLlenado extends ClasePadre {
                     dataTable.setDataAdapter(new SimpleTableDataAdapter(IniciarLlenado.this, spaceProbes));
                     dataTable.setAutoHeight(jsonBarriles.length());
                     cargarLanzas();
+                    if(obtenerLanDisp())
+                        iniciarBombeo();
                 } catch (Exception e) {
                     getFunciones().mostrarMensaje(e.getMessage());
                 }finally {
                     progressBar.setVisibility(View.GONE);
+                    etiqueta.requestFocus();
                 }
 
             }
@@ -292,12 +299,13 @@ public class IniciarLlenado extends ClasePadre {
 
     private class revisarFlujometros extends TimerTask {
 
+
         @Override
         public void run() {
             try {
                 obtenerDatosLanzas();
             }catch (Exception e){
-                getFunciones().mostrarMensaje(e.getMessage());
+                //getFunciones().mostrarMensaje(e.getMessage());
             }
         }
 
@@ -306,7 +314,11 @@ public class IniciarLlenado extends ClasePadre {
             if(jsonArray.length()>0){
                 JSONObject jsonObject=jsonArray.getJSONObject(0);
                 if(jsonObject.getInt("valor")!=0){
-                    terminarBombeo("3");
+                    IniciarLlenado.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            terminarBombeo();
+                        }
+                    });
                 }
             }
         }
@@ -358,7 +370,7 @@ public class IniciarLlenado extends ClasePadre {
                         break;
                 }
             }
-            //revisarAvance();
+            revisarAvance();
         }
     }
 }

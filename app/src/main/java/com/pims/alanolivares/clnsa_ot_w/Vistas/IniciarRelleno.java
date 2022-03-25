@@ -50,7 +50,7 @@ public class IniciarRelleno extends ClasePadre {
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                agregarBarril();
+                insertaEtiqueta(etiqueta.getText().toString());
             }
         });
         desactivarLan.setOnClickListener(new View.OnClickListener() {
@@ -97,16 +97,18 @@ public class IniciarRelleno extends ClasePadre {
         columnModel.setColumnWidth(0,150);
         dataTable.setColumnModel(columnModel);
     }
-    private void agregarBarril(){
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String eti=etiqueta.getText().toString();
-                    if(getFunciones().valEtiBarr(eti)){
+
+    @Override
+    public void validaEtiqueta(String eti){
+        try {
+            super.validaEtiqueta(eti);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
                         getFunciones().insertaData("insert into ADM_LogOperation(Objeto,Descripcion,Accion,IdUsuario,Scan) values('BTN','Aceptar Codigo','Click',"+getFunciones().getIdUsuario()+"," +getFunciones().getPistola()+ ")",SQLConnection.db_AAB);
-                        String consulta=!tipo.equals("3")?"EXEC sp_rell_Existe '"+IdOrden+"','"+eti+"'":"EXEC sp_rell_DonExiste_v2 '"+IdOrden+"','"+eti+"'";
+                        String consulta=!tipo.equals("3")?"EXEC sp_rell_Existe_v2 '"+IdOrden+"','"+eti+"'":"EXEC sp_rell_DonExiste_v2 '"+IdOrden+"','"+eti+"'";
                         JSONArray jsonArray=getFunciones().consultaJson(consulta, SQLConnection.db_AAB);
                         JSONObject jsonObject=jsonArray.getJSONObject(0);
                         if(jsonObject.getString("msg").equals("")){
@@ -116,19 +118,20 @@ public class IniciarRelleno extends ClasePadre {
                             toggleButtons(jsonObject.getString("total").equals("0"));
                             cargarBarriles();
                         }else{
+                            getFunciones().makeErrorSound();
                             getFunciones().mostrarMensaje(jsonObject.getString("msg"));
                         }
-                    }else{
-                        getFunciones().mostrarMensaje("Etiqueta invalida");
+                    }catch (Exception e){
+                        getFunciones().mostrarMensaje(e.getMessage());
+                    }finally {
+                        progressBar.setVisibility(View.GONE);
                     }
-                }catch (Exception e){
-                    getFunciones().mostrarMensaje(e.getMessage());
-                }finally {
-                    progressBar.setVisibility(View.GONE);
-                    etiqueta.setText("");
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }
+
 
     }
     private void iniciarBombeo() throws Exception{
@@ -140,34 +143,44 @@ public class IniciarRelleno extends ClasePadre {
                 JSONObject jsonObject=jsonBarriles.getJSONObject(x);
                 getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss") + "|" + jsonObject.getString("etiqueta") + "|" + jsonObject.getString("tapa") + "|" + jsonObject.getString("lanza") + "|1");
             }
+            getFunciones().mostrarMensaje("Bombeo iniciado");
             timer = new Timer();
             timer.schedule(new revisarFlujometros(), 2000, 1000);
         }else{
-            terminarBombeo("2");
-            getFunciones().insertaData("update COM_TagsActual set Valor=0 where idtag in (6,9,12)",SQLConnection.db_Emba);
+            terminarBombeo();
         }
     }
-    public void terminarBombeo(String tipo) throws Exception{
-        timer.cancel();
+    public void terminarBombeo(){
+        if(timer!=null)
+            timer.cancel();
         iniciarBom.post(new Runnable() {
             @Override
             public void run() {
-                iniciarBom.setText("Iniciar bombeo");
-                iniciarBom.setBackgroundColor(ContextCompat.getColor(IniciarRelleno.this,R.color.verde_claro) );
                 try {
-                    cargarBarriles();
-                    cargarLanzas();
+                    getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss") + "|" + lanza1.getText().toString() + "|" + lanza2.getText().toString()  + "|" + lanza3.getText().toString()  + "|"+tipo);
                 }catch (Exception e){
-                    getFunciones().mostrarMensaje("Problema al cargar lanzas, error: "+e.getMessage());
+                    getFunciones().mostrarMensaje(e.getMessage());
                 }
+                getFunciones().reintentadoRegistro("Exec [db_owner].[sp_Rell_Registra] '" + IdOrden + "','" + tipo + "'", SQLConnection.db_AAB, new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            getFunciones().insertaData("update cm_lanza set edollenada=estado, seleccion=0",SQLConnection.db_AAB);
+                            getFunciones().insertaData("delete pr_opllenado",SQLConnection.db_AAB);
+                            getFunciones().insertaData("update COM_TagsActual set Valor=0 where idtag in (4,7,10,6,9,12)",SQLConnection.db_Emba);
+                            iniciarBom.setText("Iniciar bombeo");
+                            iniciarBom.setBackgroundColor(ContextCompat.getColor(IniciarRelleno.this,R.color.verde_claro) );
+                            cargarBarriles();
+                            cargarLanzas();
+                            getFunciones().mostrarMensaje("Bombeo terminado correctamente");
+                        }catch (Exception e){
+                            getFunciones().mostrarMensaje(e.getMessage());
+                        }
+                    }
+                });
             }
         });
-        getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss") + "|" + lanza1.getText().toString() + "|" + lanza2.getText().toString()  + "|" + lanza3.getText().toString()  + "|"+tipo);
-        getFunciones().reintentadoRegistro("Exec sp_Rell_Registra '"+IdOrden+"','"+tipo+"'",SQLConnection.db_AAB);
 
-        getFunciones().insertaData("update cm_lanza set edollenada=estado, seleccion=0",SQLConnection.db_AAB);
-        getFunciones().insertaData("delete pr_opllenado",SQLConnection.db_AAB);
-        getFunciones().insertaData("update COM_TagsActual set Valor=0 where idtag in (4,7,10)",SQLConnection.db_Emba);
     }
     private boolean obtenerLanDisp(){
         try {
@@ -199,10 +212,13 @@ public class IniciarRelleno extends ClasePadre {
                     dataTable.setDataAdapter(new SimpleTableDataAdapter(IniciarRelleno.this, spaceProbes));
                     dataTable.setAutoHeight(jsonBarriles.length());
                     cargarLanzas();
+                    if(obtenerLanDisp())
+                        iniciarBombeo();
                 } catch (Exception e) {
                     getFunciones().mostrarMensaje(e.getMessage());
                 }finally {
                     progressBar.setVisibility(View.GONE);
+                    etiqueta.requestFocus();
                 }
 
             }
@@ -262,7 +278,7 @@ public class IniciarRelleno extends ClasePadre {
             try {
                 obtenerDatosLanzas();
             }catch (Exception e){
-                getFunciones().mostrarMensaje(e.getMessage());
+                //getFunciones().mostrarMensaje(e.getMessage());
             }
         }
 
@@ -271,7 +287,12 @@ public class IniciarRelleno extends ClasePadre {
             if(jsonArray.length()>0){
                 JSONObject jsonObject=jsonArray.getJSONObject(0);
                 if(jsonObject.getInt("valor")!=0){
-                    terminarBombeo("3");
+                    IniciarRelleno.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            terminarBombeo();
+                        }
+                    });
+
                 }
             }
         }
@@ -323,7 +344,7 @@ public class IniciarRelleno extends ClasePadre {
                         break;
                 }
             }
-            //revisarAvance();
+            revisarAvance();
         }
     }
 }

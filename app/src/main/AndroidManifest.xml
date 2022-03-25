@@ -13,15 +13,16 @@
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CLNSA_OT_W">
+        <activity android:name=".Vistas.ReparacionAvance"></activity>
         <activity
             android:name=".Vistas.ReubiTarima"
-            android:label="@string/title_activity_rubicar_tarima"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.CLNSA_OT_W" ></activity>
+            android:label="@string/title_activity_rubicar_tarima"
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.ResumenInventario"
-            android:label="@string/title_activity_resumen_inv"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_resumen_inv"
             android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.ConsultaBarril"
@@ -37,13 +38,13 @@
             android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.AccionMant"
-            android:label="@string/title_activity_asing_repa"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_asing_repa"
             android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.AsingRepara"
-            android:label="@string/title_activity_asing_repa"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_asing_repa"
             android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
@@ -51,37 +52,38 @@
             tools:replace="screenOrientation" />
         <activity
             android:name=".Vistas.TrasLoteDest"
-            android:theme="@style/Theme.CLNSA_OT_W"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.IdentTrasiego"
-            android:theme="@style/Theme.CLNSA_OT_W"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.IniciarRelleno"
-            android:theme="@style/Theme.CLNSA_OT_W"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.IdentRelleno"
-            android:theme="@style/Theme.CLNSA_OT_W"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.MenuRelleno"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.AvanceOrden"
-            android:theme="@style/Theme.CLNSA_OT_W"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.RegistraFallas"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_formar_paletas"
-            android:theme="@style/Theme.CLNSA_OT_W"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.FormarPaleta"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_formar_paletas"
-            android:theme="@style/Theme.CLNSA_OT_W"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Dialogos.Lanzas"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -89,18 +91,18 @@
             android:theme="@style/dialog_light" />
         <activity
             android:name=".Vistas.IniciarLlenado"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_iniciar_llenado"
-            android:theme="@style/Theme.CLNSA_OT_W"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.ResultTest"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_result_test"
-            android:theme="@style/Theme.CLNSA_OT_W"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.MenuLlenado"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.CLNSA_OT_W"/>
+            android:theme="@style/Theme.CLNSA_OT_W" />
         <activity
             android:name=".Vistas.MenuLateral"
             android:configChanges="orientation|screenSize"
@@ -132,12 +134,15 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
 </manifest>

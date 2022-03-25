@@ -29,7 +29,7 @@ public class AsingRepara extends ClasePadre {
         eti=getIntent().getStringExtra("etiqueta");
         barrica=getIntent().getStringExtra("idBarrica");
         etiqueta.setText(eti);
-        getFunciones().llenarSpinner("Select IdUsuario as id,Nombre as valor from CM_usuario Where IdGrupo = 5",usuarios);
+        getFunciones().llenarSpinner("Select IdUsuario as id,Nombre as valor from CM_usuario_WEB Where IdGrupo = 5 and Estatus=1",usuarios);
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,10 +41,8 @@ public class AsingRepara extends ClasePadre {
                     menu.putExtra("idBarrica",barrica);
                     menu.putExtra("etiqueta",eti);
                     startActivity(menu);
-
                 } catch (Exception e) {
                     getFunciones().mostrarMensaje(e.getMessage());
-                    //getFunciones().mostrarMensaje("Ocurrió un problema al procesar la solitud, por favor intenta de nuevo más tarde");
                 }
             }
         });

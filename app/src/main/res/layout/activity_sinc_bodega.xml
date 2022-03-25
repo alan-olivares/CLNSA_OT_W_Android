@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/des_act_button"
-                    android:text="Sincronizar"
+                    android:text=" Sincronizar "
                     android:enabled="false"
                     android:layout_marginBottom="30dp"></Button>
 
@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/des_act_button"
-                    android:text="Sincronizar todas"
+                    android:text="  Sincronizar todas  "
                     android:enabled="false"
                     android:layout_marginLeft="10dp"
                     android:layout_marginBottom="30dp"></Button>

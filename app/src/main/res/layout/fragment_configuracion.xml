@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".Vistas.Configuracion">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre:"
+                android:textSize="20sp"
+                android:textStyle="bold"></TextView>
+            <EditText
+                android:id="@+id/nombreC"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textAlignment="center"
+                android:background="@drawable/edittext"
+                android:hint="Ingresa un nombre valido"></EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Pistola:"
+                android:textSize="20sp"
+                android:textStyle="bold"></TextView>
+            <EditText
+                android:id="@+id/pistolaC"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textAlignment="center"
+                android:background="@drawable/edittext"
+                android:inputType="number"
+                android:hint="N° pistola"></EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Bodega montacargas:"
+                android:textSize="20sp"
+                android:textStyle="bold"></TextView>
+            <Spinner
+                android:id="@+id/bodegasC"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:theme="@style/ThemeSpinner"
+                android:textSize="20sp"></Spinner>
+            <Button
+                android:id="@+id/guardarC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/des_act_button"
+                android:text=" Guardar "
+                android:enabled="true"
+                android:layout_marginBottom="30dp"></Button>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

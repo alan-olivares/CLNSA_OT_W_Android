@@ -7,6 +7,9 @@
         android:id="@+id/reubicar"
         android:title="Reubicar tarima"/>
     <item
+        android:id="@+id/formarMP"
+        android:title="Formar pallet"/>
+    <item
         android:id="@+id/actualizarBod"
         android:title="Actualizar bodega" />
     <item

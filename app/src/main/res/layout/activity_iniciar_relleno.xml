@@ -50,9 +50,10 @@
                     android:hint="Etiqueta"
                     android:background="@drawable/edittext"
                     android:textAlignment="center"
-                    android:maxLength="10"
-                    android:layout_weight="1"
-                    android:inputType="number" />
+                    android:maxLength="11"
+                    android:inputType="number|text"
+                    android:digits="0123456789\n"
+                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/camaraINR"
@@ -84,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/des_act_button"
-                    android:text="Desactiva lanza"/>
+                    android:text="  Lanzas  "/>
                 <Button
                     android:id="@+id/iniciarBomINR"
                     android:layout_width="wrap_content"

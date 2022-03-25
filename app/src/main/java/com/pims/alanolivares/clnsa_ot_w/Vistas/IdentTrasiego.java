@@ -47,7 +47,7 @@ public class IdentTrasiego extends ClasePadre {
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                agregarBarril();
+                insertaEtiqueta(etiqueta.getText().toString());
             }
         });
         finalizar.setOnClickListener(new View.OnClickListener() {
@@ -89,29 +89,30 @@ public class IdentTrasiego extends ClasePadre {
         dataTable.setHeaderAdapter(new SimpleTableHeaderAdapter(this,spaceProbeHeaders));
         setCopyEtiqueta(dataTable,0);
     }
-    private void agregarBarril(){
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.post(new Runnable() {
-            @Override
-            public void run() {
-                String eti=etiqueta.getText().toString();
-                try {
-                    String consulta=tipo.equals("1")?"exec sp_ValidaEtiTras_v2 '"+eti+"','"+idOrden+"'":"exec sp_ValidaEtiTrasHoov '"+eti+"','"+idOrden+"','"+tanqueId+"'";
-                    if(getFunciones().valEtiBarr(eti)){
+    @Override
+    public void validaEtiqueta(String eti){
+        try {
+            super.validaEtiqueta(eti);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String consulta=tipo.equals("1")?"exec sp_ValidaEtiTras_v2 '"+eti+"','"+idOrden+"'":"exec sp_ValidaEtiTrasHoov '"+eti+"','"+idOrden+"','"+tanqueId+"'";
                         JSONArray jsonArray=getFunciones().consultaJson(consulta,SQLConnection.db_AAB);
                         getFunciones().mostrarMensaje(jsonArray.getJSONObject(0).getString("msg"));
                         cargarBarriles();
                         etiqueta.setText("");
-                    }else{
-                        getFunciones().mostrarMensaje("Etiqueta invalida");
+                    } catch (Exception e) {
+                        getFunciones().mostrarMensaje("Se generó un problema al agregar el barril "+e.getMessage());
+                    }finally {
+                        progressBar.setVisibility(View.GONE);
                     }
-                } catch (Exception e) {
-                    getFunciones().mostrarMensaje("Se generó un problema al agregar el barril "+e.getMessage());
-                }finally {
-                    progressBar.setVisibility(View.GONE);
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }
 
     }
     private void finalizarOrden(){

@@ -11,7 +11,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <ProgressBar
                 android:id="@+id/progressIDR"
                 android:indeterminateTint="@color/verde_claro"
@@ -58,12 +57,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:maxLength="10"
+                    android:maxLength="11"
+                    android:inputType="number|text"
+                    android:digits="0123456789\n"
                     android:hint="Etiqueta"
                     android:background="@drawable/edittext"
                     android:textAlignment="center"
-                    android:layout_weight="1"
-                    android:inputType="number" />
+                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/camaraIR"

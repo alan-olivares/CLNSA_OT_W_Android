@@ -30,12 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Reparacion extends ClasePadreFragment {
-    Button aceptar,camara,continuar;
-    TextView mensaje,barril;
-    Spinner uso, edad;
-    EditText etiqueta,annio;
-    String idBarrica;
-    ProgressBar progressBar;
+    private Button aceptar,camara,continuar;
+    private TextView mensaje,barril;
+    private Spinner uso, edad;
+    private EditText etiqueta,annio;
+    private String idBarrica;
+    private ProgressBar progressBar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class Reparacion extends ClasePadreFragment {
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                obtenerInformacion();
+                validaEtiqueta(etiqueta.getText().toString());
             }
         });
         continuar.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +77,9 @@ public class Reparacion extends ClasePadreFragment {
                 getFunciones().llenarSpinner("Select IdCodificacion as id,Codigo as valor from CM_COdificacion",uso);
                 getFunciones().llenarSpinner("Select idedad as id,codigo as valor from CM_Edad",edad);
                 progressBar.setVisibility(View.GONE);
+                uso.setEnabled(false);
+                edad.setEnabled(false);
+                annio.setEnabled(false);
             }
         },500);
 
@@ -104,43 +107,39 @@ public class Reparacion extends ClasePadreFragment {
 
 
     }
-    private void obtenerInformacion(){
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.post(new Runnable() {
-            @Override
-            public void run() {
-                String eti=etiqueta.getText().toString();
-                if(getFunciones().valEtiBarr(eti)){
+    @Override
+    public void validaEtiqueta(String eti){
+        try {
+            super.validaEtiqueta(eti);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.post(new Runnable() {
+                @Override
+                public void run() {
                     try {
-                        JSONArray jsonArray=getFunciones().consultaJson("exec sp_BarrilIdentidad_v2 '"+eti+"'", SQLConnection.db_AAB);
+                        JSONArray jsonArray=getFunciones().consultaJson("exec sp_BarrilIdentidad_v3 '"+eti+"'", SQLConnection.db_AAB);
                         JSONObject jsonObject=jsonArray.getJSONObject(0);
                         barril.setText("Barril: "+eti);
                         mensaje.setText(jsonObject.getString("mensaje"));
                         if(!jsonObject.getString("mensaje").equals("¡Barril no encontrado!")){
                             toggleButtons(false);
-                            uso.setEnabled(jsonObject.getString("mensaje").equals(""));
-                            edad.setEnabled(jsonObject.getString("mensaje").equals(""));
-                            annio.setEnabled(jsonObject.getString("mensaje").equals(""));
-                            uso.setSelection(jsonObject.getInt("idcodificacion"));
-                            edad.setSelection(jsonObject.getInt("idedad"));
+                            uso.setSelection(jsonObject.getInt("idcodificacion")-1);
+                            edad.setSelection(jsonObject.getInt("idedad")-1);
                             annio.setText(jsonObject.getString("año"));
                             idBarrica=jsonObject.getString("idbarrica");
+                        }else{
+                            getFunciones().makeErrorSound();
                         }
                     } catch (Exception e) {
                         getFunciones().mostrarMensaje(e.getMessage());
                     }
-                }else{
-                    getFunciones().mostrarMensaje("Etiqueta invalida");
+                    progressBar.setVisibility(View.GONE);
                 }
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-
+            });
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }
     }
     private void toggleButtons(boolean act){
-        uso.setEnabled(act);
-        edad.setEnabled(act);
-        annio.setEnabled(act);
         aceptar.setEnabled(act);
         continuar.setEnabled(!act);
         camara.setEnabled(act);
@@ -162,9 +161,25 @@ public class Reparacion extends ClasePadreFragment {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 toggleButtons(true);
+                etiqueta.requestFocus();
                 return false;
             }
         });
+        final MenuItem avance=menu.findItem(R.id.avance);
+        avance.setVisible(true);
+        avance.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent menu=new Intent(getContext(), ReparacionAvance.class);
+                startActivity(menu);
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void cargarDatos() {
+
     }
 
 }

@@ -1,7 +1,5 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +38,9 @@ public class AccionMant extends ClasePadre {
             }
         });
     }
+
+
+
     private void inicializar(){
         aceptar=findViewById(R.id.aceptarAM);
         aros=findViewById(R.id.arosAM);
@@ -51,13 +52,17 @@ public class AccionMant extends ClasePadre {
         etiqueta=findViewById(R.id.etiquetaAM);
         progressBar=findViewById(R.id.progressAM);
     }
+
     private void agregarMantenimiento(){
         progressBar.setVisibility(View.VISIBLE);
         progressBar.post(new Runnable() {
             @Override
             public void run() {
                 try {
-                    JSONArray jsonArray=getFunciones().consultaJson("exec sp_Uso_Mantenimiento_Barril '"+getFunciones().getCurrDate("yyyy-MM-dd")+"','"+eti+"'", SQLConnection.db_AAB);
+                    JSONArray jsonArray=getFunciones().consultaJson("select M.IdMantenimiento,M.IdBarrica,M.IdUsuario,U.Nombre as NomUsu " +
+                            "from PR_Mantenimiento M inner Join WM_Barrica B on B.IdBarrica = M.IdBarrica " +
+                            " inner Join CM_Usuario U on U.IdUsuario = M.IdUsuario " +
+                            "Where B.Consecutivo = SUBSTRING('"+eti+"',5,6) and convert(varchar(10),M.Fecha,120)='"+getFunciones().getCurrDate("yyyy-MM-dd")+"'", SQLConnection.db_AAB);
                     if(jsonArray.length()>0){
                         JSONObject jsonObject=jsonArray.getJSONObject(0);
                         int cantAros=(aros.getText().toString().isEmpty()?0:Integer.valueOf(aros.getText().toString()));
@@ -70,6 +75,7 @@ public class AccionMant extends ClasePadre {
                         getFunciones().mostrarMensaje("Reparación registrada correctamente");
                         onBackPressed();
                     }else{
+                        getFunciones().makeErrorSound();
                         getFunciones().mostrarMensaje("Ocurrió un problema al obtener el ID del mantenimiento");
                     }
                 } catch (Exception e) {

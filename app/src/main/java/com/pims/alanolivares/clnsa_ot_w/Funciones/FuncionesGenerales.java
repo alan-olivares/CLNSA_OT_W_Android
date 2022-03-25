@@ -10,17 +10,27 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -29,6 +39,7 @@ import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLLocal;
 import com.pims.alanolivares.clnsa_ot_w.R;
 import com.pims.alanolivares.clnsa_ot_w.Vistas.Inicio;
 import com.pims.alanolivares.clnsa_ot_w.Vistas.LoginActivity;
+import com.pims.alanolivares.clnsa_ot_w.Vistas.MenuRelleno;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +59,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -67,7 +80,7 @@ public class FuncionesGenerales {
     /**
      * Conexto que nos permite trabajar en cualquier vista en la que es llamada la clase
      */
-    static Context context;
+    private static Context context;
     /**
      * Constructor de la clase que inicializa el Context
      * @param context - Contexto de la vista en la que es llamada la clase
@@ -103,12 +116,12 @@ public class FuncionesGenerales {
      */
     public String Login(String usuario,String contrasena){
         try {
-            String result="",nombre="",idUsuario="";
+            String result="";
             JSONArray jsonArray=consultaJson("exec sp_getAcceso '"+usuario+"','"+contrasena+"'",SQLConnection.db_AAB);
             JSONObject jsonObject=jsonArray.getJSONObject(0);
             result=jsonObject.getString("msg");
             if(result.equals("1")){
-                jsonArray=consultaJson("select Nombre,IdUsuario,IdGrupo from CM_Usuario where Clave='"+usuario+"'",SQLConnection.db_AAB);
+                jsonArray=consultaJson("select Nombre,IdUsuario,IdGrupo from CM_Usuario_Web where Clave='"+usuario+"'",SQLConnection.db_AAB);
                 jsonObject=jsonArray.getJSONObject(0);
                 SharedPreferences.Editor editor = context.getSharedPreferences("Usuarios", Context.MODE_PRIVATE).edit();
                 editor.putString("nombre", jsonObject.getString("nombre"));
@@ -144,11 +157,12 @@ public class FuncionesGenerales {
             statement = con.createStatement();
             statement.executeUpdate(consulta);
         } catch (SQLException throwables) {
-            throw new Exception("Se gerneró un problema al registrar la información, revisa los datos e intenta de nuevo");
+            makeErrorSound();
+            throw new Exception("Se gerneró un problema al registrar la información: "+throwables.getMessage());
         }finally {
-            if(!con.isClosed())
+            if(con!=null && !con.isClosed())
                 con.close();
-            if(!statement.isClosed())
+            if(statement!=null && !statement.isClosed())
                 statement.close();
         }
 
@@ -183,19 +197,34 @@ public class FuncionesGenerales {
             }
             return jsonArray;
         } catch (SQLException throwables) {
-            throw new Exception("Se gerneró un problema al consultar la información");
+            makeErrorSound();
+            throw new Exception(throwables.getMessage());
         } catch (JSONException e) {
-            throw new Exception("Se gerneró un problema al convertir la información en JSON");
+            makeErrorSound();
+            throw new Exception("Se gerneró un problema al convertir la información en JSON: "+e.getMessage());
         }finally {
-            if(!con.isClosed())
+            if(con!=null && !con.isClosed())
                 con.close();
-            if(!statement.isClosed())
+            if(statement!=null && !statement.isClosed())
                 statement.close();
-            if(!resultSet.isClosed())
+            if(resultSet!=null && !resultSet.isClosed())
                 resultSet.close();
         }
 
     }
+    public String [][] busquedaTabla(String text,String tabla[][]){
+        String nueva[][]=new String[tabla.length][4];
+        int pos=0;
+        for(int x=0;x<tabla.length;x++)
+            for(int i=0;i<4;i++){
+                if(tabla[x][i].contains(text)){
+                    nueva[pos++]=tabla[x];
+                    break;
+                }
+            }
+        return nueva;
+    }
+
     /**
      * Método que consulta información en la base de datos y convierte dicha información en un
      * array bi-dimencional
@@ -211,7 +240,8 @@ public class FuncionesGenerales {
             JSONArray jsonArray= consultaJson(consulta,DB);
             return consultaTabla(jsonArray,llaves);
         } catch (JSONException e) {
-            throw new Exception("Se gerneró un problema al convertir la información e JSON");
+            makeErrorSound();
+            throw new Exception("Se gerneró un problema al convertir la información e JSON: "+e.getMessage());
         } catch (Exception e) {
             throw e;
         }
@@ -219,10 +249,10 @@ public class FuncionesGenerales {
     /**
      * Método que convierte un JSONArray en un array bi-dimencional
      *
-     * @param jsonArray - Datos de las tablas en forma de array
+     * @param jsonArray - Datos de las tablas en forma de JSONArray
      * @param llaves - Número de columnas deseadas (Obtendrá las columnas 0 hasta la variable llaves)
      * @throws Exception - Lanza información del problema ocurrido
-     * @return String[][] - Consulta convertida en array bi-dimencional
+     * @return String[][] - JSONArray convertido en array bi-dimencional
      */
     public String[][] consultaTabla(JSONArray jsonArray,int llaves) throws Exception {
         try{
@@ -234,17 +264,42 @@ public class FuncionesGenerales {
                     JSONObject jsonObject=jsonArray.getJSONObject(x);
                     while(keyItr.hasNext() && i<llaves) {
                         String key = keyItr.next();
-                        matriz[x][i++]=jsonObject.getString(key);
+                        matriz[x][i++]=jsonObject.getString(key).isEmpty()?"":jsonObject.getString(key);
                     }
-
                 }
             }
             return matriz;
         } catch (JSONException e) {
-            throw new Exception("Se gerneró un problema al convertir la información en JSON");
+            makeErrorSound();
+            throw new Exception("Se gerneró un problema al convertir la información en JSON: "+e.getMessage());
         } catch (Exception e) {
             throw e;
         }
+    }
+    public boolean iniciaOrden(String orden,String tipo, Class<?> cls){
+        try {
+            JSONArray json=consultaJson("select isnull((select Estatus from PR_Orden where IdOrden='"+orden+"'),3) as estado",SQLConnection.db_AAB);
+            if(json.getJSONObject(0).getString("estado").equals("1") || json.getJSONObject(0).getString("estado").equals("2")){
+                insertaData("update PR_Orden set Estatus=2 where IdOrden="+orden,SQLConnection.db_AAB);
+                Intent menu=new Intent(context, cls);
+                menu.putExtra("IdOrden",orden);
+                menu.putExtra("tipo",tipo);
+                context.startActivity(menu);
+                return true;
+            }
+            mostrarMensaje("..Error.. Esta orden ya se encuentra finalizada");
+        }catch (Exception e){
+            mostrarMensaje(e.getMessage());
+        }
+        makeErrorSound();
+        return false;
+    }
+    public int etiToConse(String etiqueta){
+        return Integer.valueOf(etiqueta.substring(4,10));
+    }
+    public void makeErrorSound(){
+        ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+        toneGen1.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT,250);
     }
     /**
      * Método que permite cerrar sesión del usuario el cual elimina la información alamacenada por este
@@ -286,7 +341,7 @@ public class FuncionesGenerales {
         return wifi.isConnected();
     }
     /**
-     * Método que convierte un número de tipo String a un formato requerido dentro de la aplicación
+     * Método que convierte un número de tipo String a un formato requerido dentro de la aplicación (#,###.00)
      *
      * @param numero - Número a convertir
      * @return String - Número con formato #,###.00
@@ -303,7 +358,7 @@ public class FuncionesGenerales {
      * @return boolean
      */
     public boolean valEtiBarr(String etiqueta){
-        return etiqueta.length()==10 && etiqueta.startsWith("0101");
+        return (etiqueta.length()==10 || (etiqueta.length()==11 && etiqueta.contains("\n"))) && etiqueta.startsWith("0101");
     }
     /**
      * Método que muestra al usuario un mensaje en forma de toast
@@ -311,6 +366,19 @@ public class FuncionesGenerales {
      * @param mensaje - Mensaje a mostrar
      */
     public void mostrarMensaje(String mensaje){
+        /*boolean error=mensaje.contains("..Error..");
+        Toast toast = Toast.makeText(context, mensaje.replace("..Error..",""), Toast.LENGTH_LONG);
+        View toastView = toast.getView(); // This'll return the default View of the Toast.
+
+         //And now you can get the TextView of the default View of the Toast.
+        TextView toastMessage = toastView.findViewById(android.R.id.message);
+        toastMessage.setTextSize(25);
+        toastMessage.setTextColor(Color.BLACK);
+        toastMessage.setCompoundDrawablesWithIntrinsicBounds(error?R.drawable.finalizar_tanque:R.drawable.consulta_barril, 0, 0, 0);
+        toastMessage.setGravity(Gravity.CENTER);
+        toastMessage.setCompoundDrawablePadding(16);
+        toastView.setBackgroundColor(error?Color.RED:Color.WHITE);
+        toast.show();*/
         Toast.makeText(context,mensaje,Toast.LENGTH_LONG).show();
     }
     /**
@@ -339,14 +407,16 @@ public class FuncionesGenerales {
             }
             insertaData("UPDATE COM_TagsActual set Valor=0 where IdTag in (6,9,12)",SQLConnection.db_Emba);
         }catch (JSONException e) {
+            makeErrorSound();
             throw new Exception("Se gerneró un problema al activar los flujometros");
         } catch (Exception e) {
+            makeErrorSound();
             throw new Exception("Se gerneró un problema al activar los flujometros");
         }
 
     }
     /**
-     * Método que registra los logs en archivos de texto dentro del dispositivo
+     * Método que registra los logs en archivos de texto dentro del dispositivo en la carpeta TBRE
      *
      * @param texto - Log a escribir
      * @throws IOException - Lanza problema ocurrido al registrar la información
@@ -385,6 +455,7 @@ public class FuncionesGenerales {
             insertaData("update cm_lanza set edollenada=estado, seleccion=0", SQLConnection.db_AAB);
             insertaData("delete pr_opllenado", SQLConnection.db_AAB);
         } catch (Exception e) {
+            makeErrorSound();
             throw new Exception("Se gerneró un problema al recetear el flujometro: "+e.getMessage());
         }
     }
@@ -394,8 +465,7 @@ public class FuncionesGenerales {
      * @return String - ID del usuario
      */
     public String getIdUsuario(){
-        SharedPreferences preferences = context.getSharedPreferences("Usuarios",Context.MODE_PRIVATE);
-        return preferences.getString("idUsuario","-1");
+        return getDatoCache("idUsuario");
     }
     /**
      * Método que obtiene el número de pistola que se está usando en el dispositivo
@@ -403,8 +473,16 @@ public class FuncionesGenerales {
      * @return String - Pistola
      */
     public String getPistola(){
+        return getDatoCache("pistola");
+    }
+    public String getDatoCache(String key){
         SharedPreferences preferences = context.getSharedPreferences("Usuarios",Context.MODE_PRIVATE);
-        return preferences.getString("pistola","1");
+        return preferences.getString(key,"-1");
+    }
+    public void saveDatoCache(String key,String valor){
+        SharedPreferences.Editor editor = context.getSharedPreferences("Usuarios", Context.MODE_PRIVATE).edit();
+        editor.putString(key, valor);
+        editor.commit();
     }
     /**
      * Método que permite al mostrarle al usuario un mensaje al usuario cuando ocurrió un
@@ -414,11 +492,12 @@ public class FuncionesGenerales {
      * @param consulta - Insert o Update que se requiere hacer
      * @param conexion - Conexión de SQLConection
      */
-    public void reintentadoRegistro(String consulta,String conexion){
+    public void reintentadoRegistro(String consulta,String conexion,Runnable runAfter){
         try {
-            insertaData(consulta,conexion);
-            mostrarMensaje("Operación realizada con exito");
+            consultaJson(consulta,conexion);
+            runAfter.run();
         } catch (Exception e) {
+            makeErrorSound();
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
@@ -426,7 +505,7 @@ public class FuncionesGenerales {
                     switch (which){
                         case DialogInterface.BUTTON_POSITIVE:
                             dialog.dismiss();
-                            reintentadoRegistro(consulta,conexion);
+                            reintentadoRegistro(consulta,conexion,runAfter);
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
                             dialog.dismiss();
@@ -434,7 +513,7 @@ public class FuncionesGenerales {
                     }
                 }
             };
-            builder.setMessage("Se generó un problema al registrar la información: "+e.getMessage()+". ¿Quieres intentar nuevamente?")
+            builder.setMessage(e.getMessage()+". ¿Quieres intentar nuevamente?")
                     .setPositiveButton("Si", dialogClickListener)
                     .setNegativeButton("No", dialogClickListener).show();
         }
@@ -689,7 +768,53 @@ public class FuncionesGenerales {
         }
     }
     /**
-     * <p>Clase que extiende de TimerTask la cual estará verificando si existen notificaciones
+     * Método que verifica la versión del dispositivo para conocer si está instalada la última versión
+     *
+     * @return boolean
+     */
+    public boolean versionUpdate(){
+        try {
+            JSONArray versionUpdate=consultaJson("select val1 from CM_Config where idConfig=6",SQLConnection.db_AAB);
+            float ver=0,verU=0;
+            try {
+                PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+                String version = pInfo.versionName;
+                ver = Float.parseFloat(version);
+                verU=Float.parseFloat(versionUpdate.getJSONObject(0).getString("val1"));
+                if (verU>ver){
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    try {
+                                        JSONArray updateLink=consultaJson("select val3 from CM_Config where idConfig=6",SQLConnection.db_AAB);
+                                        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(updateLink.getJSONObject(0).getString("val3")));
+                                        context.startActivity(launchBrowser);
+                                    } catch (Exception e) {
+                                        mostrarMensaje("Ocurrió un problema al obtener el link de descarga, intenta de nuevo más tarde, error:"+e.getMessage());
+                                        ((AppCompatActivity)context).finishAndRemoveTask();
+                                    }
+                                    break;
+                            }
+                        }
+                    };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Actualización disponible").setMessage("Se encontró una nueva versión para descargar, por favor actualizala para poder continuar")
+                            .setPositiveButton("Descargar", dialogClickListener)
+                            .setCancelable(false).show();
+                    return true;
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                mostrarMensaje("Error en convertir la versión a númeral, verifica la versión en el sistema");
+            }
+        } catch (Exception e) {
+            mostrarMensaje("Error al obtener la última versión de la aplicación, error: "+e.getMessage());
+        }
+        return false;
+    }
+    /**
+     * <p>Clase privada que extiende de TimerTask la cual estará verificando si existen notificaciones
      * dentro del servidor
      * </p>
      * <p>
@@ -699,7 +824,6 @@ public class FuncionesGenerales {
      * <li>run</li>
      * </ul>
      * </p>
-     *
      *
      * @author Alan Istael Olivares Mora
      * @version v1.0

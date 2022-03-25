@@ -58,40 +58,31 @@ public class ResultTest extends ClasePadre {
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getFunciones().valEtiBarr(etiqueta.getText().toString())){
-                    try {
-                        JSONArray jsonArray=getFunciones().consultaJson("exec sp_BarrilIdentidad_v2 '"+etiqueta.getText()+"'", SQLConnection.db_AAB);
-                        if(jsonArray.length()>0){
-                            JSONObject jsonObject=jsonArray.getJSONObject(0);
-                            uso.setText(jsonObject.getString("uso"));
-                            edad.setText(jsonObject.getString("edad"));
-                            getFunciones().mostrarMensaje(jsonObject.getString("mensaje"));
-                        }
-                    } catch (Exception e) {
-                        getFunciones().mostrarMensaje(e.getMessage());
-                    }
-                }else{
-                    getFunciones().mostrarMensaje("Etiqueta invalida");
-                }
+                insertaEtiqueta(etiqueta.getText().toString());
             }
         });
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getFunciones().valEtiBarr(etiqueta.getText().toString())){
-                    String valor=aprovado.isChecked()?"1":"3";
-                    try {
-                        getFunciones().insertaData("exec sp_MantStatus '"+etiqueta.getText()+"','"+valor+"'", SQLConnection.db_AAB);
-                        getFunciones().mostrarMensaje("Actualizado correctamente");
-                    } catch (Exception e) {
-                        getFunciones().mostrarMensaje(e.getMessage());
-                    }
-                }else{
-                    getFunciones().mostrarMensaje("Etiqueta invalida");
-                }
+                insertaEtiqueta(etiqueta.getText().toString());
             }
         });
         getAprovados();
+    }
+    @Override
+    public void validaEtiqueta(String eti){
+        try {
+            super.validaEtiqueta(eti);
+            JSONArray jsonArray=getFunciones().consultaJson("exec sp_BarrilIdentidad_v2 '"+etiqueta.getText()+"'", SQLConnection.db_AAB);
+            if(jsonArray.length()>0){
+                JSONObject jsonObject=jsonArray.getJSONObject(0);
+                uso.setText(jsonObject.getString("uso"));
+                edad.setText(jsonObject.getString("edad"));
+                getFunciones().mostrarMensaje(jsonObject.getString("mensaje"));
+            }
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }
     }
     private void getAprovados(){
         try {

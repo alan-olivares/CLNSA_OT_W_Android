@@ -1,6 +1,5 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,7 +50,6 @@ public class TrasLoteDest extends ClasePadre {
         bombear=findViewById(R.id.iniciarBomTL);
         lectura=findViewById(R.id.lecturaTLD);
         dataTable=findViewById(R.id.tablaTLD);
-
         progressBar=findViewById(R.id.progressTLD);
     }
     private void iniciarBombeo(){
@@ -72,7 +69,6 @@ public class TrasLoteDest extends ClasePadre {
                     getFunciones().insertaData("exec sp_RegTanqueLectura '"+idregtanque+"','"+lanzaLec+"'",SQLConnection.db_AAB);
                 timer.cancel();
             }
-
         } catch (Exception e) {
             getFunciones().mostrarMensaje(e.getMessage());
         }
@@ -94,8 +90,6 @@ public class TrasLoteDest extends ClasePadre {
                         spaceProbeHeaders= new String[]{"Cant", "Fecha", "Alcohol", "Uso", "Tanque", "Bodega", "Costado", "Fila", "IdReg"};
                         columnModel = new TableColumnDpWidthModel(TrasLoteDest.this, 9, 110);
                         //columnModel.setColumnWidth(0,150);
-
-
                     }else{
                         tabla=getFunciones().consultaTabla("select top 1 Op.Cantidad as 'B. a Vacíar',count(TB.IdBarrica) as 'B. Vacíados' " +
                                 ",OP.Fecha as Fecha_LL,AL.Descripcion as Alcohol,C.Codigo as Uso,T.NoSerie as Tanque from WM_OperacionTQHBarrilHis TB  " +
@@ -137,7 +131,7 @@ public class TrasLoteDest extends ClasePadre {
             try {
                 obtenerDatosLanzas();
             }catch (Exception e){
-                getFunciones().mostrarMensaje(e.getMessage());
+                //getFunciones().mostrarMensaje(e.getMessage());
             }
         }
 

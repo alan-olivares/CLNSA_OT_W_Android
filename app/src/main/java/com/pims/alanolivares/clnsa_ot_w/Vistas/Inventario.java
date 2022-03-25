@@ -45,7 +45,6 @@ public class Inventario extends ClasePadreFragment {
             {"SELECT [PosicionID],[SeccionID],[Nombre],[Consecutivo] FROM AA_Posicion","AA_Posicion"},
             {"SELECT [SeccionID],[AreaId],[Nombre],[Consecutivo] FROM AA_Seccion","AA_Seccion"},
             {"SELECT [RackLocID],[NivelID],[ClasifiID] FROM WM_RackLoc","WM_RackLoc"},
-            {"SELECT [RackLocID],[NivelID],[ClasifiID] FROM WM_RackLoc","WM_RackLoc"},
             {"SELECT [IdAlcohol],[Codigo],[Descripcion],[Grado],[Observaciones] FROM CM_Alcohol","CM_Alcohol"},
             {"SELECT [IdCodEdad],[IdCodificicacion],[IdEdad] FROM CM_CodEdad","CM_CodEdad"},
             {"SELECT [IdCodificacion],[Codigo],[Descripcion] FROM CM_Codificacion","CM_Codificacion"},
@@ -55,6 +54,11 @@ public class Inventario extends ClasePadreFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void cargarDatos() {
+
     }
 
     @Override
@@ -130,7 +134,7 @@ public class Inventario extends ClasePadreFragment {
                                         notificationManager.notify(notificationID, builderNoti.build());
                                     }
                                 }
-                            }).start();
+                            },"TBRE_Sinc").start();
                         }else{
                             func.mostrarMensaje("Hay una descarga en proceso, espera a que se finalice");
                         }

@@ -51,8 +51,10 @@
                     android:background="@drawable/edittext"
                     android:ems="10"
                     android:hint="Etiqueta"
-                    android:inputType="number"
-                    android:maxLength="10"
+                    android:maxLength="11"
+                    android:inputType="number|text"
+                    android:digits="0123456789\n"
+                    android:maxLines="1"
                     android:textAlignment="center" />
 
                 <Button
@@ -115,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/des_act_button"
-                    android:text="Desactiva lanza"/>
+                    android:text="  Lanzas  "/>
                 <Button
                     android:id="@+id/iniciarBomILL"
                     android:layout_width="wrap_content"

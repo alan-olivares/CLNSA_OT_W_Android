@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadre;
+import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.SpinnerObjeto;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
@@ -41,7 +42,7 @@ public class SincBodega extends ClasePadre {
         setContentView(R.layout.activity_sinc_bodega);
         inicializar();
         setTitulo("Sincronización de bodegas");
-        ArrayList<SpinnerObjeto> lista= getFunciones().llenarSpinner("SELECT AlmacenID as id, Nombre as valor FROM AA_almacen ORDER BY ID",bodegas);
+        ArrayList<SpinnerObjeto> lista= getFunciones().llenarSpinner("SELECT AlmacenID as id, Nombre as valor FROM AA_almacen ORDER BY Consecutivo",bodegas);
         bodegas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -84,7 +85,7 @@ public class SincBodega extends ClasePadre {
                 }else{
                     getFunciones().mostrarMensaje("Hay una descarga en proceso, espera a que se finalice");
                 }
-                Thread.getAllStackTraces().keySet().forEach((t) -> System.out.println(t.getName() + "\nIs Daemon " + t.isDaemon() + "\nIs Alive " + t.isAlive()));
+                //Thread.getAllStackTraces().keySet().forEach((t) -> System.out.println(t.getName() + "\nIs Daemon " + t.isDaemon() + "\nIs Alive " + t.isAlive()));
 
             }
         });
@@ -167,10 +168,13 @@ public class SincBodega extends ClasePadre {
         todas=findViewById(R.id.sincronizarToSB);
     }
     private void cargarBodega(SpinnerObjeto bodega) throws Exception {
-        JSONArray jsonArray=getFunciones().consultaJson("EXEC sp_AA_SincBodega "+bodega.getId(), SQLConnection.db_AAB);
-        getFunciones().ejecutarComLocal("delete from wm_barril where bodega="+bodega.getId());
-        getFunciones().actualizarSQLLocal("wm_barril",jsonArray,false);
-        getFunciones().ejecutarComLocal("INSERT OR REPLACE INTO cm_SyncBodega (idbodega, usuario ,fecha) VALUES('"+bodega.getId()+"','"+getFunciones().getIdUsuario()+"',datetime('now', 'localtime'));");
+        cargarBodega(bodega.getId(),getFunciones());
+    }
+    public void cargarBodega(int bodega, FuncionesGenerales func) throws Exception {
+        JSONArray jsonArray=func.consultaJson("EXEC sp_AA_SincBodega "+bodega, SQLConnection.db_AAB);
+        func.ejecutarComLocal("delete from wm_barril where bodega="+bodega);
+        func.actualizarSQLLocal("wm_barril",jsonArray,false);
+        func.ejecutarComLocal("INSERT OR REPLACE INTO cm_SyncBodega (idbodega, usuario ,fecha) VALUES('"+bodega+"','"+func.getIdUsuario()+"',datetime('now', 'localtime'));");
     }
     private void ponerFechaAct(SpinnerObjeto bodega){
         ultima.post(new Runnable() {

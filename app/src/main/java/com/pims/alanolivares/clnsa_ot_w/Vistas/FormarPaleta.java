@@ -1,13 +1,8 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,13 +11,11 @@ import android.widget.TextView;
 
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadre;
-import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 import org.json.JSONArray;
 
-import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
@@ -44,7 +37,7 @@ public class FormarPaleta extends ClasePadre {
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validaBarril();
+                insertaEtiqueta(etiqueta.getText().toString());
             }
         });
         formar.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +65,7 @@ public class FormarPaleta extends ClasePadre {
         setCopyEtiqueta(dataTable,0);
     }
     String tabla[][];
+
     private void cargarBarriles(){
         progressBar.setVisibility(View.VISIBLE);
         progressBar.post(new Runnable() {
@@ -102,62 +96,68 @@ public class FormarPaleta extends ClasePadre {
         });
 
     }
-    private void validaBarril(){
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String eti=etiqueta.getText().toString();
-                    if(tabla.length==0){
-                        agregarBarril(eti);
-                    }else if(tabla.length>9){
-                        getFunciones().mostrarMensaje("Esta Paleta ya se completó seleccione la función de formar otra");
-                    }else if(!getFunciones().valEtiBarr(eti)){
-                        getFunciones().mostrarMensaje("La etiqueta es incorrecta");
-                    }else{
-                        JSONArray jsonArray= getFunciones().consultaJson("exec sp_PalletValida_v2 '"+pallet+"','"+eti+"'", SQLConnection.db_AAB);
-                        String msg=jsonArray.getJSONObject(0).getString("msg");
-                        if(msg.equals("")){
-                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    switch (which){
-                                        case DialogInterface.BUTTON_POSITIVE:
-                                            try {
-                                                agregarBarril(eti);
-                                            } catch (Exception e) {
-                                                getFunciones().mostrarMensaje(e.getMessage());
-                                            }
-                                            break;
-                                        case DialogInterface.BUTTON_NEGATIVE:
-                                            dialog.dismiss();
-                                            break;
-                                    }
-                                }
-                            };
-                            AlertDialog.Builder builder = new AlertDialog.Builder(FormarPaleta.this);
-                            builder.setMessage("¿Desea agregar el barril?").setPositiveButton("Si", dialogClickListener)
-                                    .setNegativeButton("No", dialogClickListener).show();
+    @Override
+    public void validaEtiqueta(String eti) {
+        try {
+            super.validaEtiqueta(eti);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if(tabla.length==0){
+                            agregarBarril(eti);
+                        }else if(tabla.length>9){
+                            getFunciones().makeErrorSound();
+                            getFunciones().mostrarMensaje("Esta Paleta ya se completó seleccione la función de formar otra");
                         }else{
-                            getFunciones().mostrarMensaje(msg);
+                            JSONArray jsonArray= getFunciones().consultaJson("exec sp_PalletValida_v2 '"+pallet+"','"+eti+"'", SQLConnection.db_AAB);
+                            String msg=jsonArray.getJSONObject(0).getString("msg");
+                            if(msg.equals("")){
+                                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which){
+                                            case DialogInterface.BUTTON_POSITIVE:
+                                                try {
+                                                    agregarBarril(eti);
+                                                } catch (Exception e) {
+                                                    getFunciones().mostrarMensaje(e.getMessage());
+                                                }
+                                                break;
+                                            case DialogInterface.BUTTON_NEGATIVE:
+                                                dialog.dismiss();
+                                                break;
+                                        }
+                                    }
+                                };
+                                AlertDialog.Builder builder = new AlertDialog.Builder(FormarPaleta.this);
+                                builder.setMessage("¿Desea agregar el barril?").setPositiveButton("Si", dialogClickListener)
+                                        .setNegativeButton("No", dialogClickListener).show();
+                            }else{
+                                getFunciones().makeErrorSound();
+                                getFunciones().mostrarMensaje(msg);
+                            }
                         }
+                        etiqueta.setText("");
+                    } catch (Exception e) {
+                        getFunciones().mostrarMensaje(e.getMessage());
                     }
-                    etiqueta.setText("");
-                } catch (Exception e) {
-                    getFunciones().mostrarMensaje(e.getMessage());
+                    finally {
+                        progressBar.setVisibility(View.GONE);
+                    }
                 }
-                finally {
-                    progressBar.setVisibility(View.GONE);
-                }
-            }
-        });
+            });
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }
+
 
     }
     private void agregarBarril(String eti) throws Exception{
         if(getFunciones().valEtiBarr(eti)){
             getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss")+"|"+pallet+"|"+eti+"|0");
-            getFunciones().insertaData("Update WM_Barrica Set IdPallet = '"+pallet+"' Where Consecutivo = SUBSTRING('"+eti+"',5,6)",SQLConnection.db_AAB);
+            getFunciones().insertaData("exec sp_Barril_Asign_Pallet '"+pallet+"','"+eti+"'",SQLConnection.db_AAB);
             cargarBarriles();
         }else{
             getFunciones().mostrarMensaje("Etiqueta invalida");

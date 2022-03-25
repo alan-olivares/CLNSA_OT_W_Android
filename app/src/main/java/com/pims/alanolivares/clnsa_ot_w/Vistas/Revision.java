@@ -72,8 +72,8 @@ public class Revision extends ClasePadreFragment {
             String[] head = {"Barril", "Cantidad", "Litros"};
             String [][] datos={{json.getString("barril"),json.getString("cantidad"),getFunciones().formatNumber(json.getString("litros"))}};
             llenarTabla(head,datos,descripcion);
-            continuar.setText("Formar Paleta");
-            otro.setText("Reparación");
+            continuar.setText("  Formar Paleta  ");
+            otro.setText("  Reparación  ");
             otro.setVisibility(View.VISIBLE);
             continuar.setOnClickListener(new View.OnClickListener() {
                 @Override

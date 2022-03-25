@@ -3,6 +3,7 @@ package com.pims.alanolivares.clnsa_ot_w.Funciones;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,7 +36,7 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
  * @version v1.0
  *
  */
-public class ClasePadreFragment  extends Fragment {
+public abstract class ClasePadreFragment  extends Fragment {
     /**
      * Referencia a la clase de FuncionesGenerales
      */
@@ -76,6 +77,8 @@ public class ClasePadreFragment  extends Fragment {
                 etiqueta.setError(null);
                 if(charSequence.toString().length()>=10 && !func.valEtiBarr(charSequence.toString()))
                     etiqueta.setError("Etiqueta invalida");
+                else if(charSequence.toString().contains("\n"))
+                    insertaEtiqueta(charSequence.toString());
             }
             @Override
             public void afterTextChanged(Editable editable) {
@@ -86,6 +89,39 @@ public class ClasePadreFragment  extends Fragment {
         etiqueta.requestFocus();
         //Cerramos el teclado para que no sea visible y no obstraya información de la pantalla
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+    /**
+     * Método que permite correr el proceso de insertar la etiqueta desde esta clase, donde al final
+     * termina dejando vacio el campo de etiqueta para estar prepardo para el siguiente proceso
+     *
+     */
+    public void insertaEtiqueta(String eti){
+        try {
+            validaEtiqueta(eti);
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }finally {
+            etiqueta.post(new Runnable() {
+                @Override
+                public void run() {
+                    etiqueta.setText("");
+                    etiqueta.requestFocus();
+                }
+            });
+
+        }
+    }
+    /**
+     * Método que permite validar si la etiqueta está correcta, este metodo debe ser sobre escrito
+     * en todas las clases que necesite validar la etiqueta
+     *
+     * @param etiqueta - Etiqueta que se necesita validar
+     */
+    public void validaEtiqueta(String etiqueta) throws Exception{
+        if(!func.valEtiBarr(etiqueta)){
+            func.makeErrorSound();
+            throw new Exception("Etiqueta invalida");
+        }
     }
     /**
      * Método que asigna un texto al Action Bar
@@ -120,9 +156,9 @@ public class ClasePadreFragment  extends Fragment {
             result -> {
                 if(result.getContents()!=null){
                     if(func.valEtiBarr(result.getContents())){
-                        etiqueta.setText(result.getContents());
+                        etiqueta.setText(result.getContents()+"\n");
                     }else{
-                        Toast.makeText(getContext(), "Etiqueta invalida" , Toast.LENGTH_LONG).show();
+                        getFunciones().mostrarMensaje("Etiqueta invalida");
                     }
                 }
             });
@@ -168,9 +204,7 @@ public class ClasePadreFragment  extends Fragment {
      * Estructura de método que se encarga de traer los datos del servidor para agregarlos
      * a la tabla principal
      */
-    public void cargarDatos(){
-        //Codigo diferente en cada fragment
-    }
+    public abstract void cargarDatos();
     /**
      * Método que trae la información adicional de cada renglon de la tabla principal
      * y la muestra en un menu inferior

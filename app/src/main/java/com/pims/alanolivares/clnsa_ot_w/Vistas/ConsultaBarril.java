@@ -61,16 +61,7 @@ public class ConsultaBarril extends ClasePadre {
             @Override
             public void onClick(View view) {
                 String eti=etiqueta.getText().toString();
-                if(getFunciones().valEtiBarr(eti)){
-                    try {
-                        cargaDetalles(eti);
-
-                    } catch (Exception e) {
-                        getFunciones().mostrarMensaje(e.getMessage());
-                    }
-                }else{
-                    getFunciones().mostrarMensaje("Etiqueta invalida");
-                }
+                insertaEtiqueta(eti);
             }
         });
     }
@@ -101,41 +92,50 @@ public class ConsultaBarril extends ClasePadre {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 toggleButtons(true);
+                etiqueta.requestFocus();
                 return false;
             }
         });
         return true;
     }
-    private void cargaDetalles(String eti) throws Exception {
-        JSONArray json=getFunciones().getJsonLocal("select B.Anio, Al.Descripcion as Alcohol, C.Codigo as Tipo,B.Tapa," +
-                "strftime('%Y-%m-%d',recepcion) as llenada, strftime('%Y-%m-%d',relleno) as relleno, " +
-                "A.Nombre || ';Cos:' ||substr(AR.Nombre,8) ||';F:'||substr(S.Nombre,5) || ';T:' ||  substr(P.Nombre,6) ||';N:' || substr(N.Nombre,6) as ubicacion," +
-                "B.Litros, B.idpallet, B.bodega from wm_barril B join cm_alcohol Al ON B.alcohol=Al.idalcohol " +
-                "join CM_Codificacion C ON B.Tipo=C.IdCodificacion join aa_almacen A ON B.bodega=A.almacenid " +
-                "join aa_area AR ON B.costado=AR.areaid join aa_seccion S ON B.fila=S.seccionid join aa_posicion P ON B.Torre=P.posicionId join aa_nivel N on B.nivel=N.nivelId " +
-                "where B.consecutivo = "+Integer.valueOf(eti.substring(4)));
-        if(json.length()>0){
-            toggleButtons(false);
-            String idPallet="",bodega="";
-            JSONObject jsonO=json.getJSONObject(0);
-            annio.setText("Año: "+jsonO.getString("anio"));
-            alcohol.setText("Alcohol: "+jsonO.getString("Alcohol"));
-            tipo.setText("Tipo: "+jsonO.getString("Tipo"));
-            tapa.setText("Tapa: "+jsonO.getString("tapa"));
-            litros.setText("Litros: "+getFunciones().formatNumber(jsonO.getString("Litros")));
-            llenada.setText("Llenada: "+jsonO.getString("llenada"));
-            relleno.setText("Relleno: "+jsonO.getString("relleno"));
-            ubicacion.setText("Ubicación: "+jsonO.getString("ubicacion"));
-            idPallet=jsonO.getString("idpallet");
-            bodega=jsonO.getString("bodega");
-            json=getFunciones().getJsonLocal(" select '0101' || substr('000000'|| consecutivo,-6) as Consecutivo from wm_barril where idpallet="+idPallet);
-            String datos[][]=getFunciones().consultaTabla(json,1);
-            tabla.setDataAdapter(new SimpleTableDataAdapter(this, datos));
-            json=getFunciones().getJsonLocal("select strftime('%Y-%m-%d %H:%M',fecha) as fecha from cm_SyncBodega where idbodega="+bodega);
-            ultima.setText("Última sincronización: "+json.getJSONObject(0).getString("fecha"));
-            tabla.setAutoHeight(datos.length);
-        }else{
-            getFunciones().mostrarMensaje("La etiqueta "+eti+" no arrojo resultados, intenta sincronizar las bodegas primero");
+    @Override
+    public void validaEtiqueta(String eti) {
+        try {
+            super.validaEtiqueta(eti);
+            JSONArray json=getFunciones().getJsonLocal("select B.Anio, Al.Descripcion as Alcohol, C.Codigo as Tipo,B.Tapa," +
+                    "strftime('%Y-%m-%d',recepcion) as llenada, strftime('%Y-%m-%d',relleno) as relleno, " +
+                    "A.Nombre || ';Cos:' ||substr(AR.Nombre,8) ||';F:'||substr(S.Nombre,5) || ';T:' ||  substr(P.Nombre,6) ||';N:' || substr(N.Nombre,6) as ubicacion," +
+                    "B.Litros, B.idpallet, B.bodega from wm_barril B join cm_alcohol Al ON B.alcohol=Al.idalcohol " +
+                    "join CM_Codificacion C ON B.Tipo=C.IdCodificacion join aa_almacen A ON B.bodega=A.almacenid " +
+                    "join aa_area AR ON B.costado=AR.areaid join aa_seccion S ON B.fila=S.seccionid join aa_posicion P ON B.Torre=P.posicionId join aa_nivel N on B.nivel=N.nivelId " +
+                    "where B.consecutivo = "+Integer.valueOf(eti.substring(4)));
+            if(json.length()>0){
+                toggleButtons(false);
+                String idPallet="",bodega="";
+                JSONObject jsonO=json.getJSONObject(0);
+                annio.setText("Año: "+jsonO.getString("anio"));
+                alcohol.setText("Alcohol: "+jsonO.getString("Alcohol"));
+                tipo.setText("Tipo: "+jsonO.getString("Tipo"));
+                tapa.setText("Tapa: "+jsonO.getString("tapa"));
+                litros.setText("Litros: "+getFunciones().formatNumber(jsonO.getString("Litros")));
+                llenada.setText("Llenada: "+jsonO.getString("llenada"));
+                relleno.setText("Relleno: "+jsonO.getString("relleno"));
+                ubicacion.setText("Ubicación: "+jsonO.getString("ubicacion"));
+                idPallet=jsonO.getString("idpallet");
+                bodega=jsonO.getString("bodega");
+                json=getFunciones().getJsonLocal(" select '0101' || substr('000000'|| consecutivo,-6) as Consecutivo from wm_barril where idpallet="+idPallet);
+                String datos[][]=getFunciones().consultaTabla(json,1);
+                tabla.setDataAdapter(new SimpleTableDataAdapter(this, datos));
+                json=getFunciones().getJsonLocal("select strftime('%Y-%m-%d %H:%M',fecha) as fecha from cm_SyncBodega where idbodega="+bodega);
+                ultima.setText("Última sincronización: "+json.getJSONObject(0).getString("fecha"));
+                tabla.setAutoHeight(datos.length);
+            }else{
+                getFunciones().makeErrorSound();
+                getFunciones().mostrarMensaje("La etiqueta "+eti+" no arrojo resultados, intenta sincronizar las bodegas primero");
+            }
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
         }
+
     }
 }

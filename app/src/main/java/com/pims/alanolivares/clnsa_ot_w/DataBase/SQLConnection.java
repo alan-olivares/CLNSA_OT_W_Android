@@ -17,13 +17,13 @@ import java.sql.SQLException;
 public class SQLConnection {
     private static final String LOG = "DEBUG";
     //IP del servidor al que se conectará
-    public static String ip = "192.168.1.14";
+    public static String ip = "192.168.1.42";
     //Puerto en el que esta escuchando las peticiones, por default es 1433
     private static String port = "1433";
     //Driver web usado para la comunicación entre SQL Server y Java
     private static String classs = "net.sourceforge.jtds.jdbc.Driver";
     //Nombres de las base de datos
-    public static String db_AAB = "AAB_CLNSA";
+    public static String db_AAB = "AAB_CLNSA_2022";
     public static String db_Emba = "Embarrilado01";
     //Credenciales de acceso al SQL Server
     private static String user = "aiom";

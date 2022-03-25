@@ -57,6 +57,7 @@ public class MenuLateral extends AppCompatActivity implements NavigationView.OnN
     Revision revision=new Revision();
     Montacargas montacargas=new Montacargas();
     Inventario inventario=new Inventario();
+    Configuracion configuracion;
     Object paginas[]={llenado,rellenado,trasiego,trasiegoHoover,reparacion,revision,montacargas,inventario};
     int vistas[]={R.id.llenado,R.id.relleno,R.id.trasiego,R.id.trasiegoHo,R.id.reparacion,R.id.revision,R.id.montacargas,R.id.inventario};
     FragmentManager fragmentManager;
@@ -93,6 +94,7 @@ public class MenuLateral extends AppCompatActivity implements NavigationView.OnN
         TextView nombres = (TextView) hView.findViewById(R.id.nombreIni);
         TextView pistola = (TextView) hView.findViewById(R.id.pistolaMenu);
         TextView version = (TextView) hView.findViewById(R.id.version);
+        configuracion=new Configuracion(nombres,pistola);
         SharedPreferences preferences = getSharedPreferences("Usuarios",MODE_PRIVATE);
         String nombre=preferences.getString("nombre","No existe");
         String pistolas=preferences.getString("pistola","1");
@@ -203,12 +205,19 @@ public class MenuLateral extends AppCompatActivity implements NavigationView.OnN
             fragmentTransaction.replace(R.id.contenedor,inventario);
             fragmentTransaction.commit();
             item.setCheckable(true);
+        } else if (id == R.id.config) {
+            fragmentTransaction=fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.contenedor,configuracion);
+            fragmentTransaction.commit();
+            item.setCheckable(true);
         } else if (id == R.id.nav_send) {
+            SharedPreferences preferences = getSharedPreferences("Usuarios",MODE_PRIVATE);
+            String nombre=preferences.getString("nombre","No existe");
             Intent email = new Intent(Intent.ACTION_SEND);
-            email.putExtra(Intent.EXTRA_EMAIL, new String[]{ "sjacobo@pims.com.mx"});
+            email.putExtra(Intent.EXTRA_EMAIL, new String[]{ "sjacobo@pims.com.mx","aolivares@pims.com.mx"});
             email.putExtra(Intent.EXTRA_SUBJECT, "Asunto con la pistola "+func.getPistola());
-            email.putExtra(Intent.EXTRA_TEXT, "¡Hola! Soy el usuario con ID: "+func.getIdUsuario()+"\n" +
-                    "\n\n\n\nDatos para el desarrollador: \n"+getDatos());
+            email.putExtra(Intent.EXTRA_TEXT, "¡Hola! Soy "+nombre+" tengo problemas con: \n" +
+                    "\n\n\n\n\n\nDatos para el desarrollador: \n"+getDatos());
             email.setType("message/rfc822");
             startActivity(Intent.createChooser(email, "Escoge una opción de correo electronico:"));
         }else if (id == R.id.cerrar) {
@@ -223,7 +232,7 @@ public class MenuLateral extends AppCompatActivity implements NavigationView.OnN
         return "Marca: " + Build.BRAND+"\n"+
                 "Modelo: " + Build.MODEL+"\n"+
                 "ID: " + Build.ID+"\n"+
-                "Manofacturación: " + Build.MANUFACTURER+"\n"+
+                "Manufacturación: " + Build.MANUFACTURER+"\n"+
                 "Base: " + Build.VERSION_CODES.BASE+"\n"+
                 "SDK  " + Build.VERSION.SDK+"\n"+
                 "BOARD: " + Build.BOARD+"\n"+

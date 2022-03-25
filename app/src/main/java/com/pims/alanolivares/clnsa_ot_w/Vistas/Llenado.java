@@ -66,6 +66,7 @@ public class Llenado extends ClasePadreFragment {
         dataTable=view.findViewById(R.id.llenado_table);
         progressBar=view.findViewById(R.id.progressBarLlenado);
         TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(getContext(), 4, 100);
+        columnModel.setColumnWidth(1,160);
         dataTable.setColumnModel(columnModel);
         setTabla(dataTable,spaceProbeHeaders);
         setTitle("Órdenes de Llenado");
@@ -120,34 +121,6 @@ public class Llenado extends ClasePadreFragment {
 
             }
         });
-    }
-
-    public void proceso(int index){
-        final BottomSheetDialog bottomSheet = new BottomSheetDialog(getActivity());
-        View bottomSheet2 = getLayoutInflater().inflate(R.layout.detalles_result, null);
-        //HorizontalScrollView ho=bottomSheet2.findViewById(R.id.scrollDet);
-
-    }
-
-    public AttributeSet createAttributes(String tamano) {
-        String attributes =
-                "<attribute xmlns:android=\"http://schemas.android.com/apk/res/android\" " +
-                        "android:layout_width=\"" + tamano +  "\" android:layout_height=\"wrap_content\" />";
-
-        XmlPullParserFactory factory = null;
-        try {
-            factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            XmlPullParser parser = factory.newPullParser();
-            parser.setInput(new StringReader(attributes));
-            parser.next();
-            return Xml.asAttributeSet(parser);
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override

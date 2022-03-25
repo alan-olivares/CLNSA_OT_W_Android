@@ -76,10 +76,9 @@ public class Trasiego extends ClasePadreFragment {
                     continuar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent menu=new Intent(getContext(),IdentTrasiego.class);
-                            menu.putExtra("IdOrden",IdOrden);
-                            menu.putExtra("tipo","1");
-                            startActivity(menu);
+                            if(!getFunciones().iniciaOrden(IdOrden,"1",IdentTrasiego.class)){
+                                cargarDatos();
+                            }
                             bottomSheet.dismiss();
                         }
                     });

@@ -44,11 +44,7 @@ public class IdentRelleno extends ClasePadre {
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    validaBarril();
-                } catch (Exception e) {
-                    getFunciones().mostrarMensaje(e.getMessage());
-                }
+                insertaEtiqueta(etiqueta.getText().toString());
             }
         });
     }
@@ -59,14 +55,15 @@ public class IdentRelleno extends ClasePadre {
             setTitulo("Ident. receptores");
         }
     }
-    private void validaBarril(){
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String eti=etiqueta.getText().toString();
-                    if(getFunciones().valEtiBarr(eti)){
+    @Override
+    public void validaEtiqueta(String eti){
+        try {
+            super.validaEtiqueta(eti);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
                         JSONArray datos=getFunciones().consultaJson("exec sp_ValidaReg  '"+eti+"','"+idOrden+"'", SQLConnection.db_AAB);
                         switch(datos.getJSONObject(0).getInt("valor")){
                             case 1:
@@ -77,6 +74,7 @@ public class IdentRelleno extends ClasePadre {
                                     getFunciones().mostrarMensaje("Este Barril está marcado como Donador; para rellenarlo es necesario marcarlo como Resto");
                                     getFunciones().insertaData("insert into ADM_LogOperation(Objeto,Descripcion,Accion,IdUsuario,Scan) values('FNC','ValidaEtiqueta 1-2a','" +eti+ "'," +getFunciones().getIdUsuario()+ "," +getFunciones().getPistola()+ ")",SQLConnection.db_AAB);
                                 }
+                                getFunciones().makeErrorSound();
                                 break;
                             case 2:
                                 if(tipo.equals("1")){
@@ -85,6 +83,7 @@ public class IdentRelleno extends ClasePadre {
                                     getFunciones().mostrarMensaje("Este barril ya fue identificado como relleno");
                                     getFunciones().insertaData("insert into ADM_LogOperation(Objeto,Descripcion,Accion,IdUsuario,Scan) values('FNC','ValidaEtiqueta 2-1c','" +eti+ "'," +getFunciones().getIdUsuario()+ "," +getFunciones().getPistola()+ ")",SQLConnection.db_AAB);
                                 }
+                                getFunciones().makeErrorSound();
                                 break;
                             case 0:
                                 datos=getFunciones().consultaJson("exec sp_validaOrdenBarril_v2  '"+idOrden+"','"+eti+"','"+tipo+"'", SQLConnection.db_AAB);
@@ -92,17 +91,18 @@ public class IdentRelleno extends ClasePadre {
                                 cargarBarriles();
                                 break;
                         }
-                    }else{
-                        getFunciones().mostrarMensaje("Etiqueta invalida");
+                        etiqueta.setText("");
+                    }catch(Exception e){
+                        getFunciones().mostrarMensaje(e.getMessage());
+                    }finally {
+                        progressBar.setVisibility(View.GONE);
                     }
-                    etiqueta.setText("");
-                }catch(Exception e){
-                    getFunciones().mostrarMensaje(e.getMessage());
-                }finally {
-                    progressBar.setVisibility(View.GONE);
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }
+
 
     }
     private void cargarBarriles(){
@@ -111,8 +111,10 @@ public class IdentRelleno extends ClasePadre {
             @Override
             public void run() {
                 try {
-                    String consulta="exec sp_Rell_Opera_Detail '"+idOrden+"','"+tipo+"'";
+                    String consulta="exec sp_Rell_Opera_Detail_v2 '"+idOrden+"','"+tipo+"'";
                     String tabla[][]=getFunciones().consultaTabla(consulta, SQLConnection.db_AAB,5);
+                    for(int x=0;x<tabla.length;x++)
+                        tabla[x][3]=getFunciones().formatNumber(tabla[x][3]);
                     total.setText("Total: "+tabla.length);
                     dataTable.setDataAdapter(new SimpleTableDataAdapter(IdentRelleno.this, tabla));
                     dataTable.setAutoHeight(tabla.length);
@@ -150,7 +152,7 @@ public class IdentRelleno extends ClasePadre {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         try {
-                            getFunciones().insertaData("exec sp_ValidaEtiRell '"+etiqueta.getText().toString()+"', "+idOrden+",1", SQLConnection.db_AAB);
+                            getFunciones().insertaData("exec sp_ValidaEtiRell '"+etiqueta.getText().toString()+"', "+idOrden+","+tipo, SQLConnection.db_AAB);
                             getFunciones().insertaData("insert into ADM_LogOperation(Objeto,Descripcion,Accion,IdUsuario,Scan) values('FNC','ValidaEtiqueta 2-1a','" +etiqueta.getText().toString()+ "'," +getFunciones().getIdUsuario()+ "," +getFunciones().getPistola()+ ")",SQLConnection.db_AAB);
                             cargarBarriles();
                         } catch (Exception e) {

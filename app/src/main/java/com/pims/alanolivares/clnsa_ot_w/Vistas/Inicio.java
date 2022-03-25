@@ -56,12 +56,15 @@ public class Inicio extends AppCompatActivity {
             @Override
             public void run() {
                 Intent mainIntent=null;
-                if(!usuario.equals("No existe")){
-                    if(func.isOnlineNet() && func.servidorActivo()){
-                        if(!func.horaCorrecta()){
+                if(!usuario.equals("No existe")){//Ya ha iniciado sessión anteriormente
+                    if(func.isOnlineNet() && func.servidorActivo()){//Si tiene conexión a internet
+                        if(!func.horaCorrecta()){//La hora del dispositivo no coincide con el servidor
                             return;
                         }
-                        String result=func.Login(usuario,contrasena);
+                        if(func.versionUpdate()){//Existe una actualización disponible
+                            return;
+                        }
+                        String result=func.Login(usuario,contrasena);//Autenticamos al usuario
                         if(result.equals("1")){
                             mainIntent = new Intent(Inicio.this,MenuLateral.class);
                             func.activarNotificaciones();

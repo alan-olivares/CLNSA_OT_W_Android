@@ -50,6 +50,10 @@
     <item android:title="Más">
         <menu>
             <item
+                android:id="@+id/config"
+                android:icon="@drawable/ic_baseline_settings_24"
+                android:title="Configuración" />
+            <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_baseline_alternate_email_24"
                 android:title="Contacto" />

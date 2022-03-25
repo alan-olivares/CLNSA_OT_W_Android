@@ -11,7 +11,6 @@ import android.database.sqlite.SQLiteOpenHelper;
  *
  * @author Alan Israel Olivares Mora
  * @version v1.0
- *
  */
 public class SQLLocal  extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
@@ -42,7 +41,7 @@ public class SQLLocal  extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS CM_TipoOp(IdTipoOP int NOT NULL,Descripcion varchar(50),Indexy int)");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS cm_SyncBodega(idbodega int PRIMARY KEY, usuario nvarchar(80),fecha datetime)");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS PR_Lote(IdLote bigint NOT NULL,IdRecurso int NOT NULL,IDEstadoLote int NOT NULL,IdAlcohol int NOT NULL,Recepcion datetime NOT NULL,Liberacion datetime)");
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS PR_NvUbicacion(Consecutivo int,Racklocfin int,tipo int)");
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS PR_NvUbicacion(Consecutivo bigint,Racklocfin int,tipo int)");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS PR_Op(IdOperacion bigint  NOT NULL,IdOrden bigint NOT NULL,Cantidad float,Estatus int,Fecha varchar(10),IdAlcohol int,IdCodificacion int,IdTanque int,IdLote bigint,AreaID bigint,SeccionID bigint)");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS PR_Operacion(IdOperacion bigint NOT NULL,IdOrden bigint NOT NULL,Cantidad float,Estatus int,Fecha varchar(10),IdAlcohol int,IdCodEdad int,IdTanque int,IdLote bigint)");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS PR_OperaDetail(IdOperaDetail bigint  NOT NULL,IdOperacion bigint NOT NULL,IdBarrica bigint NOT NULL,Capacidad float,Estatus int)");

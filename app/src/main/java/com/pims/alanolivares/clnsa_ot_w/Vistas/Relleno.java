@@ -47,6 +47,8 @@ public class Relleno extends ClasePadreFragment {
         setTabla(dataTable,spaceProbeHeaders);
         TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(getContext(), 4, 95);
         columnModel.setColumnWidth(1,130);
+        columnModel.setColumnWidth(2,120);
+        columnModel.setColumnWidth(3,120);
         dataTable.setColumnModel(columnModel);
         return view;
     }
@@ -64,7 +66,7 @@ public class Relleno extends ClasePadreFragment {
             @Override
             public void run() {
                 try{
-                    String datos[][]=getFunciones().consultaTabla("exec sp_OrdenRell_Pistola_Detalle '"+barriles[index][0]+"'", SQLConnection.db_AAB,6);
+                    String datos[][]=getFunciones().consultaTabla("exec sp_OrdenRell_Pistola_Detalle_v2 '"+barriles[index][0]+"'", SQLConnection.db_AAB,6);
                     Button continuar = vista.findViewById(R.id.continuar);
                     String[] head = {"Fecha", "Alcohol", "Uso","Costado","Fila","B. disp"};
                     llenarTabla(head,datos,descripcion);
@@ -73,9 +75,9 @@ public class Relleno extends ClasePadreFragment {
                     continuar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent menu=new Intent(getContext(),MenuRelleno.class);
-                            menu.putExtra("IdOrden",IdOrden);
-                            startActivity(menu);
+                            if(!getFunciones().iniciaOrden(IdOrden,"0",MenuRelleno.class)){
+                                cargarDatos();
+                            }
                             bottomSheet.dismiss();
                         }
                     });
@@ -88,15 +90,6 @@ public class Relleno extends ClasePadreFragment {
                 }
             }
         });
-    }
-
-    public void proceso(int index){
-        final BottomSheetDialog bottomSheet = new BottomSheetDialog(getActivity());
-        View bottomSheet2 = getLayoutInflater().inflate(R.layout.detalles_result, null);
-
-
-
-
     }
 
     @Override

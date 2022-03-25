@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/gris_fondo"
     android:gravity="center"
     android:orientation="vertical">
     <ProgressBar
@@ -15,16 +15,34 @@
         android:foregroundGravity="center"
         android:visibility="gone"
         android:indeterminate="true" />
-    <HorizontalScrollView
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <de.codecrafters.tableview.TableView
-            android:id="@+id/monta_table"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            app:tableView_columnCount="4"
-            android:dividerHeight="3dip"
-            android:layout_marginTop="20dp"/>
-    </HorizontalScrollView>
+        android:layout_height="wrap_content"
+        android:padding="32dp"
+        android:layout_gravity="center"
+        android:clipToPadding="false">
 
+        <View
+            android:id="@+id/indicator"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@drawable/gradient_bg"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/tab_bg"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="#ffffff"
+            app:tabIndicatorColor="@null"
+            app:tabRippleColor="@null"/>
+
+    </FrameLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

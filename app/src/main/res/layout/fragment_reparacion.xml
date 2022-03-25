@@ -49,10 +49,11 @@
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="Etiqueta"
-                    android:maxLength="10"
+                    android:maxLength="11"
+                    android:inputType="number|text"
+                    android:digits="0123456789\n"
                     android:background="@drawable/edittext"
-                    android:textAlignment="center"
-                    android:inputType="number" />
+                    android:textAlignment="center" />
 
                 <Button
                     android:id="@+id/camaraREP"
@@ -137,10 +138,12 @@
                     <Spinner
                         android:id="@+id/usoREP"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:textAlignment="center"
                         android:textSize="18sp"
                         android:layout_marginTop="10dp"
+                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        android:theme="@style/ThemeSpinner"
                         android:layout_weight="1"></Spinner>
                 </LinearLayout>
                 <LinearLayout
@@ -159,10 +162,12 @@
                     <Spinner
                         android:id="@+id/edadREP"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:textAlignment="center"
                         android:textSize="18sp"
                         android:layout_marginTop="10dp"
+                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        android:theme="@style/ThemeSpinner"
                         android:layout_weight="1"></Spinner>
                 </LinearLayout>
                 <LinearLayout
@@ -186,6 +191,7 @@
                         android:textSize="18sp"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1"
+                        android:clickable="false"
                         android:enabled="false"></EditText>
                 </LinearLayout>
 

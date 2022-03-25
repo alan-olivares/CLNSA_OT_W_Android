@@ -34,6 +34,8 @@ public class ReubiTarima extends ClasePadre {
         inicializar();
         setCamara(camara);
         setEtiqueta(etiqueta);
+        String eti =getIntent().getStringExtra("etiqueta");
+        etiqueta.setText(eti);
     }
     private void inicializar(){
         bodega=findViewById(R.id.bodegaRT);
@@ -55,7 +57,7 @@ public class ReubiTarima extends ClasePadre {
                 SpinnerObjeto planta=(SpinnerObjeto)adapterView.getSelectedItem();
                 mensaje.setText("");
                 if(planta.getId()!=-1){
-                    getFunciones().llenarSpinnerLocal("select -1 as id,'' as valor union select AlmacenID,Nombre from AA_Almacen where PlantaID="+planta.getId(),bodega);
+                    getFunciones().llenarSpinnerLocal("select -1 as id,'' as valor,-1 as conse union select AlmacenID,Nombre,Consecutivo from AA_Almacen where PlantaID="+planta.getId()+" order by conse",bodega);
                 }
             }
 
@@ -154,27 +156,38 @@ public class ReubiTarima extends ClasePadre {
         reubicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String eti=etiqueta.getText().toString();
-                SpinnerObjeto niv=(SpinnerObjeto)nivel.getSelectedItem();
-                if(getFunciones().valEtiBarr(eti)){
-                    try {
-                        //reubicarPalet(eti);
-                        String rackLoc=getRack(niv.getId());
-                        getFunciones().ejecutarComLocal("Insert into PR_NvUbicacion(Consecutivo,RacklocFin,Tipo) Values(" +eti+ "," +rackLoc+ ",1)");
-                        getFunciones().mostrarMensaje("Ubicación guardada con exito");
-                        etiqueta.setText("");
-                        vaciarValor(1);
-                        planta.setSelection(0);
-                    } catch (Exception e) {
-                        getFunciones().mostrarMensaje(e.getMessage());
-                    }
-                }else{
-                    getFunciones().mostrarMensaje("Etiqueta invalida");
-                }
+                insertaEtiqueta(etiqueta.getText().toString());
             }
         });
     }
-    private boolean verificaNivel(int nivelID,int pos){
+
+    @Override
+    public void validaEtiqueta(String eti){
+        try {
+            super.validaEtiqueta(eti);
+            if(solicitudPendiente()){
+                aviso.setText("El pallet donde se encuentra la etiqueta "+etiqueta.getText().toString()+" ya fue posicionada en otro lugar");
+                return;
+            }
+            if(reubicar.isEnabled()){
+                SpinnerObjeto niv=(SpinnerObjeto)nivel.getSelectedItem();
+                String rackLoc=getRack(niv.getId());
+                getFunciones().ejecutarComLocal("Insert into PR_NvUbicacion(Consecutivo,RacklocFin,Tipo) Values(" +eti+ "," +rackLoc+ ",1)");
+                getFunciones().mostrarMensaje("Ubicación guardada con exito");
+                etiqueta.setText("");
+                vaciarValor(1);
+                planta.setSelection(0);
+            }else{
+                getFunciones().makeErrorSound();
+                getFunciones().mostrarMensaje("Debes seleccionar un nivel valido primero");
+            }
+
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }
+    }
+
+    private boolean verificaNivel(int nivelID, int pos){
         try{
             if(tieneSolicitud(nivelID)){
                 aviso.setText("Ya has registrado una solicitud dentro de este nivel");
@@ -185,6 +198,7 @@ public class ReubiTarima extends ClasePadre {
                 aviso.setText("Este nivel ya cuenta con "+barriles+" barriles asignados, y no se puede asignar otro pallet");
                 return false;
             }
+
             if(pos==1)//Es el primer nivel y no se necesita verificar si hay barriles debajo de él
                 return true;
             else{//Verificamos que existan barriles debajo de él
@@ -199,7 +213,12 @@ public class ReubiTarima extends ClasePadre {
             return false;
         }
     }
-
+    private boolean solicitudPendiente() throws Exception{
+        int pallet=getFunciones().getJsonLocal("select idpallet from wm_barril where consecutivo="+getFunciones().etiToConse(etiqueta.getText().toString())).getJSONObject(0).getInt("idpallet");
+        System.out.println(pallet);
+        JSONArray nivel=getFunciones().getJsonLocal("select count(b.consecutivo) as barriles from PR_NvUbicacion U inner join wm_barril b on U.Consecutivo='0101' || substr('000000'|| b.consecutivo,-6) where b.IdPallet="+pallet);
+        return nivel.getJSONObject(0).getInt("barriles")!=0;
+    }
     private int obtenerBarrilesNiv(int nivelID) throws Exception{
         JSONArray nivel=getFunciones().getJsonLocal("select count(consecutivo) as barriles from wm_barril where Nivel="+nivelID);
         return nivel.getJSONObject(0).getInt("barriles");
@@ -214,6 +233,7 @@ public class ReubiTarima extends ClasePadre {
         return json.getJSONObject(0).getInt("racks")!=0;
     }
 
+    //Metodo extraido de la versión original y mejorado en verificaNivel()
     private void reubicarPalet(String eti) throws Exception{
         SpinnerObjeto niv=(SpinnerObjeto)nivel.getSelectedItem();
         JSONArray json=getFunciones().getJsonLocal("select PosicionId,Consecutivo from aa_nivel where nivelid="+niv.getId());
@@ -282,8 +302,6 @@ public class ReubiTarima extends ClasePadre {
             case 6://Nivel
                 reubicar.setEnabled(false);
                 aviso.setText("");
-
-
         }
     }
 }

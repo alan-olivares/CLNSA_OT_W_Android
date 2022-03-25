@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/actualizar"
-        android:title="Buscar"
         android:icon="@drawable/ic_baseline_update_24"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/avance"
+        android:icon="@drawable/ic_baseline_view_list_24"
+        android:visible="false"
         app:showAsAction="always"/>
 </menu>

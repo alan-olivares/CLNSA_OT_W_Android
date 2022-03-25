@@ -126,11 +126,12 @@
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="Etiqueta"
-                    android:maxLength="10"
+                    android:maxLength="11"
+                    android:inputType="number|text"
+                    android:digits="0123456789\n"
                     android:background="@drawable/edittext"
                     android:textAlignment="center"
-                    android:layout_weight="1"
-                    android:inputType="number" />
+                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/camaraIT"
@@ -195,7 +196,7 @@
                     android:layout_marginBottom="30dp"
                     android:background="@drawable/redondo"
                     android:clickable="false"
-                    android:text="Finalizar órden"></Button>
+                    android:text="  Finalizar órden  "></Button>
 
                 <Button
                     android:id="@+id/trasegarIT"
@@ -206,7 +207,7 @@
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/des_act_button"
                     android:clickable="false"
-                    android:text="Trasegar a tanque destino"></Button>
+                    android:text="  Trasegar a tanque destino  "></Button>
 
             </LinearLayout>
 

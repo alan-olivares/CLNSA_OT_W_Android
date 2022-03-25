@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gris_fondo"
+    android:gravity="center"
+    android:orientation="vertical">
+    <de.codecrafters.tableview.TableView
+        android:id="@+id/monta_table_rea"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:tableView_columnCount="4"
+        android:dividerHeight="3dip"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>

@@ -77,10 +77,9 @@ public class TrasiegoHoover extends ClasePadreFragment {
                     continuar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent menu=new Intent(getContext(),IdentTrasiego.class);
-                            menu.putExtra("IdOrden",IdOrden);
-                            menu.putExtra("tipo","2");
-                            startActivity(menu);
+                            if(!getFunciones().iniciaOrden(IdOrden,"2",IdentTrasiego.class)){
+                                cargarDatos();
+                            }
                             bottomSheet.dismiss();
                         }
                     });

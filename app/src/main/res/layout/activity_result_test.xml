@@ -36,10 +36,11 @@
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="Etiqueta"
-                    android:maxLength="10"
+                    android:maxLength="11"
+                    android:inputType="number|text"
+                    android:digits="0123456789\n"
                     android:background="@drawable/edittext"
-                    android:textAlignment="center"
-                    android:inputType="number" />
+                    android:textAlignment="center" />
 
                 <Button
                     android:id="@+id/camaraRT"

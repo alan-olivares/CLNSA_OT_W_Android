@@ -33,17 +33,7 @@ public class RegistraFallas extends ClasePadre {
             @Override
             public void onClick(View view) {
                 String eti=etiqueta.getText().toString();
-                if(getFunciones().valEtiBarr(eti)){
-                    try {
-                        getFunciones().insertaData("exec sp_FallasAsig '"+eti+"','"+(orificio.isChecked()?"1":"0")+"','"+(desajuste.isChecked()?"1":"0")+"'", SQLConnection.db_AAB);
-                        etiqueta.setText("");
-                        getFunciones().mostrarMensaje("Barril registrado con exito");
-                        orificio.setChecked(false);
-                        desajuste.setChecked(false);
-                    } catch (Exception e) {
-                        getFunciones().mostrarMensaje(e.getMessage());
-                    }
-                }
+                insertaEtiqueta(eti);
             }
         });
     }
@@ -54,7 +44,19 @@ public class RegistraFallas extends ClasePadre {
         orificio=findViewById(R.id.orificioRF);
         desajuste=findViewById(R.id.desajusteRF);
     }
-
+    @Override
+    public void validaEtiqueta(String eti){
+        try {
+            super.validaEtiqueta(eti);
+            getFunciones().insertaData("exec sp_FallasAsig '"+eti+"','"+(orificio.isChecked()?"1":"0")+"','"+(desajuste.isChecked()?"1":"0")+"'", SQLConnection.db_AAB);
+            etiqueta.setText("");
+            getFunciones().mostrarMensaje("Barril registrado con exito");
+            orificio.setChecked(false);
+            desajuste.setChecked(false);
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }
+    }
 
 
 }

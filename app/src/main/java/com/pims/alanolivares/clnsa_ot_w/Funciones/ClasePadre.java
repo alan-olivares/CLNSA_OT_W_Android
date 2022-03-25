@@ -1,21 +1,35 @@
 package com.pims.alanolivares.clnsa_ot_w.Funciones;
 
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.pims.alanolivares.clnsa_ot_w.Vistas.AvanceOrden;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
 import de.codecrafters.tableview.listeners.TableDataClickListener;
+import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
+import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 /**
  * <p>Clase que extiende de AppCompatActivity para el procesamiento de
@@ -36,7 +50,7 @@ public class ClasePadre  extends AppCompatActivity {
      * Editext del campo etiqueta
      */
     EditText etiqueta;
-
+    int opcion=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +91,16 @@ public class ClasePadre  extends AppCompatActivity {
         this.etiqueta=etiqueta;
         //Habilitamos el campo de la etiqueta para poder traer los datos copiados del dispositivo
         etiqueta.requestFocus();
+        /*etiqueta.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    insertaEtiqueta(etiqueta.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });*/
         etiqueta.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -87,6 +111,10 @@ public class ClasePadre  extends AppCompatActivity {
                 etiqueta.setError(null);
                 if(charSequence.toString().length()>=10 && !func.valEtiBarr(charSequence.toString()))
                     etiqueta.setError("Etiqueta invalida");
+                else if(charSequence.toString().contains("\n"))
+                    insertaEtiqueta(charSequence.toString());
+
+
             }
             @Override
             public void afterTextChanged(Editable editable) {
@@ -95,6 +123,39 @@ public class ClasePadre  extends AppCompatActivity {
         });
         //Cerramos el teclado para que no sea visible y no obstraya información de la pantalla
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+    /**
+     * Método que permite correr el proceso de insertar la etiqueta desde esta clase, donde al final
+     * termina dejando vacio el campo de etiqueta para estar prepardo para el siguiente proceso
+     *
+     */
+    public void insertaEtiqueta(String eti){
+        try {
+            validaEtiqueta(eti);
+        } catch (Exception e) {
+            getFunciones().mostrarMensaje(e.getMessage());
+        }finally {
+            etiqueta.post(new Runnable() {
+                @Override
+                public void run() {
+                    etiqueta.setText("");
+                    etiqueta.requestFocus();
+                }
+            });
+
+        }
+    }
+    /**
+     * Método que permite validar si la etiqueta está correcta, este metodo debe ser sobre escrito
+     * en todas las clases que necesite validar la etiqueta
+     *
+     * @param etiqueta - Etiqueta que se necesita validar
+     */
+    public void validaEtiqueta(String etiqueta) throws Exception{
+        if(!func.valEtiBarr(etiqueta)){
+            func.makeErrorSound();
+            throw new Exception("Etiqueta invalida");
+        }
     }
     /**
      * Método que permite copiar el campo de etiqueta al portapapeles para cualquier uso requerido
@@ -137,7 +198,8 @@ public class ClasePadre  extends AppCompatActivity {
             result -> {
                 if(result.getContents()!=null){
                     if(func.valEtiBarr(result.getContents())){
-                        etiqueta.setText(result.getContents());
+                        etiqueta.setText(result.getContents()+"\n");
+                        //insertaEtiqueta(result.getContents());
                     }else{
                         getFunciones().mostrarMensaje("Etiqueta invalida");
                     }
@@ -155,5 +217,44 @@ public class ClasePadre  extends AppCompatActivity {
         }
     }
 
+    public void ordenar(NoScrollViewTable dataTable,String tabla[][],ArrayList<String> listaopc){
+        final android.app.AlertDialog.Builder builderSingle = new AlertDialog.Builder(this);
+        builderSingle.setTitle("Ordenar por: ");
+        builderSingle.setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_single_choice,listaopc);
+
+        builderSingle.setSingleChoiceItems(adapter, opcion, new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                opcion=which;
+                Arrays.sort(tabla, new Comparator<String[]>() {
+                    @Override
+                    public int compare(String[] strings, String[] t1) {
+                        return strings[which].compareTo(t1[which]);
+                    }
+                });
+                updateTable(dataTable,tabla,tabla.length );
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+    }
+    protected void updateTable(NoScrollViewTable dataTable,String nueva[][],int tamano ){
+        dataTable.setDataAdapter(new SimpleTableDataAdapter(this, nueva));
+        dataTable.setAutoHeight(tamano);
+    }
+    public void llenarTabla(String[] head,String datos[][],NoScrollViewTable tabla){
+        tabla.setAutoHeight(datos.length);
+        tabla.setColumnCount(head.length);
+        tabla.setHeaderAdapter(new SimpleTableHeaderAdapter(this,head));
+        tabla.setDataAdapter(new SimpleTableDataAdapter(this, datos));
+    }
 
 }
