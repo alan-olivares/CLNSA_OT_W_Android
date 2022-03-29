@@ -1,52 +1,26 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import android.content.Context;
-
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
-import android.text.method.ScrollingMovementMethod;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Xml;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadreFragment;
-import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.IOException;
-import java.io.StringReader;
-
 import de.codecrafters.tableview.TableView;
-import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
-import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 
 public class Llenado extends ClasePadreFragment {
@@ -139,7 +113,6 @@ public class Llenado extends ClasePadreFragment {
                     jsonArray=getFunciones().consultaJson("select T.Codigo as Tanque,A.Descripcion as Alcohol,I.Año as annio,RD.IdLote,RD.IdRecepcion,RD.IdRecDetail " +
                             "from WM_RecDetail RD Left Join CM_Tanque T on T.IDTanque = RD.IdTanque left Join CM_Item I on I.IdItem = RD.IdItem " +
                             "Left Join CM_Alcohol A on A.IdAlcohol = RD.IdAlcohol Where RD.Estatus = 0", SQLConnection.db_AAB);
-
                     String[][] spaceProbes= new String[jsonArray.length()][4];
                     for (int x=0;x<jsonArray.length();x++){
                         JSONObject jsonObject=jsonArray.getJSONObject(x);

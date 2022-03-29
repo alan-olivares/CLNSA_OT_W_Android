@@ -1,12 +1,16 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -19,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
@@ -29,6 +35,8 @@ public class ResumenInventario extends ClasePadre {
     TextView barriles,litros;
     Button buscar;
     ProgressBar progressBar;
+    private SearchView sear;
+    String tablaDa[][];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,25 +192,24 @@ public class ResumenInventario extends ClasePadre {
             String consultaTotal="select count(B.consecutivo) as Barriles,IFNULL(sum(B.litros),0)  as Litros " +
                     " from wm_barril B join cm_alcohol A ON B.alcohol=A.idalcohol " +
                     "join CM_codificacion C ON B.tipo=C.idcodificacion "+condicion;
-            String consulta="select B.Anio as annio, A.Descripcion as Alcohol, C.Codigo as Tipo,'0101' || substr('000000'|| B.consecutivo,-6) as Etiqueta , IFNULL(B.litros,0) as Litros " +
+            String consulta="select '0101' || substr('000000'|| B.consecutivo,-6) as Etiqueta,B.Anio as annio, A.Descripcion as Alcohol, C.Codigo as Tipo, IFNULL(B.litros,0) as Litros " +
                     "from wm_barril B join cm_alcohol A ON B.alcohol=A.idalcohol join CM_codificacion C ON B.Tipo=C.idcodificacion  " +
                             "join AA_nivel N ON B.nivel=N.nivelid "+condicion;
             JSONArray jsonArray=getFunciones().getJsonLocal(consulta);
-            String datos[][]=new String[jsonArray.length()][5];
+            tablaDa=new String[jsonArray.length()][5];
             if(jsonArray.length()>0){
                 for(int x=0;x<jsonArray.length();x++){
                     JSONObject json=jsonArray.getJSONObject(x);
-                    datos[x][0]=json.getString("Etiqueta");
-                    datos[x][1]=json.getString("annio");
-                    datos[x][2]=json.getString("Alcohol");
-                    datos[x][3]=json.getString("Tipo");
-                    datos[x][4]=getFunciones().formatNumber(json.getString("Litros"));
+                    tablaDa[x][0]=json.getString("Etiqueta");
+                    tablaDa[x][1]=json.getString("annio");
+                    tablaDa[x][2]=json.getString("Alcohol");
+                    tablaDa[x][3]=json.getString("Tipo");
+                    tablaDa[x][4]=getFunciones().formatNumber(json.getString("Litros"));
                 }
                 jsonArray=getFunciones().getJsonLocal(consultaTotal);
                 barriles.setText("Barriles: "+jsonArray.getJSONObject(0).getString("Barriles"));
                 litros.setText("Litros: "+getFunciones().formatNumber(jsonArray.getJSONObject(0).getString("Litros") ));
-                tabla.setDataAdapter(new SimpleTableDataAdapter(this, datos));
-                tabla.setAutoHeight(datos.length);
+                updateTable(tabla,tablaDa,tablaDa.length );
                 tabla.setVisibility(View.VISIBLE);
             }else{
                 getFunciones().mostrarMensaje("No se encontraron barriles en está ubicación, verifica los datos o intenta sincronizar la bodega primero ");
@@ -229,5 +236,45 @@ public class ResumenInventario extends ClasePadre {
                 //tabla.setDataAdapter(new SimpleTableDataAdapter(this, new String[][]{}));
 
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //Inflar el menú; Esto agrega elementos a la barra de acción si está presente.
+        getMenuInflater().inflate(R.menu.menu_busqueda, menu);
+        final MenuItem ordenar=menu.findItem(R.id.ordenar);
+        ordenar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                ArrayList<String> listaopc=new ArrayList<>();
+                listaopc.add("Etiqueta");
+                listaopc.add("Año");
+                listaopc.add("Alcohol");
+                listaopc.add("Tipo");
+                ordenar(tabla,tablaDa,listaopc);
+                return false;
+            }
+        });
+        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
+        sear=(SearchView) MenuItemCompat.getActionView(searchItem);
+        sear.setQueryHint("Buscar algún dato");
+        sear.setIconifiedByDefault(true);
+        sear.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(!newText.equals("")){
+                    String aux[][]=getFunciones().busquedaTabla(newText,tablaDa);
+                    updateTable(tabla,aux,aux.length );
+                }else
+                    updateTable(tabla,tablaDa,tablaDa.length );
+                return false;
+            }
+        });
+        //CastButtonFactory.setUpMediaRouteButton(getApplicationContext(),menu,R.id.media_route_menu_item);
+        return true;
     }
 }

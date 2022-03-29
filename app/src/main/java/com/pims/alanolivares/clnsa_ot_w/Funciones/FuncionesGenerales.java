@@ -213,16 +213,17 @@ public class FuncionesGenerales {
 
     }
     public String [][] busquedaTabla(String text,String tabla[][]){
-        String nueva[][]=new String[tabla.length][4];
+        int ancho=(tabla.length>0)?tabla[0].length:0;
+        String nueva[][]=new String[tabla.length][ancho];
         int pos=0;
         for(int x=0;x<tabla.length;x++)
-            for(int i=0;i<4;i++){
+            for(int i=0;i<ancho;i++){
                 if(tabla[x][i].contains(text)){
                     nueva[pos++]=tabla[x];
                     break;
                 }
             }
-        return nueva;
+        return Arrays.copyOf(nueva,pos);
     }
 
     /**
@@ -739,7 +740,7 @@ public class FuncionesGenerales {
      */
     public boolean horaCorrecta(){
         try {
-            JSONArray hora=consultaJson("select FORMAT (getdate(), 'yyyy-MM-dd HH:mm:ss') as fecha",SQLConnection.db_AAB);
+            JSONArray hora=consultaJson("select convert(varchar,GETDATE(),120) as fecha",SQLConnection.db_AAB);
             String horaCel=getCurrDate("yyyy-MM-dd HH:mm:ss");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date1 = sdf.parse(horaCel);
