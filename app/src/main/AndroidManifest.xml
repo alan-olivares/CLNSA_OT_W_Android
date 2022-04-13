@@ -13,7 +13,19 @@
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CLNSA_OT_W">
-        <activity android:name=".Vistas.ReparacionAvance"></activity>
+        <activity
+            android:name=".Vistas.IdentTrasiegoParcial"
+            android:label="@string/title_activity_ident_trasiego_parcial"
+            android:theme="@style/Theme.CLNSA_OT_W"></activity>
+        <activity
+            android:name=".Vistas.TraspasoHooverOpc"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_traspaso_hoover_opc"
+            android:theme="@style/Theme.CLNSA_OT_W" />
+        <activity
+            android:name=".Vistas.TrasiegoHooverInicia"
+            android:theme="@style/Theme.CLNSA_OT_W" />
+        <activity android:name=".Vistas.ReparacionAvance" />
         <activity
             android:name=".Vistas.ReubiTarima"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -134,15 +146,15 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
 </manifest>

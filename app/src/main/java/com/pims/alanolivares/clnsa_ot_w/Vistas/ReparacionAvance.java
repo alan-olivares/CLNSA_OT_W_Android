@@ -1,18 +1,13 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuItemCompat;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -24,26 +19,20 @@ import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadre;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 
 import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.listeners.TableDataLongClickListener;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
-import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class ReparacionAvance extends ClasePadre {
-    NoScrollViewTable dataTable;
-    TextView cantidad;
-    ProgressBar progressBar;
+    private NoScrollViewTable dataTable;
+    private TextView cantidad;
+    private ProgressBar progressBar;
     private SearchView sear;
-    String tabla[][];
-    boolean montrando=false;
+    private String tabla[][];
+    private boolean montrando=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

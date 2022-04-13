@@ -45,12 +45,12 @@ public class ClasePadre  extends AppCompatActivity {
     /**
      * Referencia a la clase de FuncionesGenerales
      */
-    FuncionesGenerales func;
+    private FuncionesGenerales func;
     /**
      * Editext del campo etiqueta
      */
-    EditText etiqueta;
-    int opcion=-1;
+    private EditText etiqueta;
+    private int opcion=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,8 +113,6 @@ public class ClasePadre  extends AppCompatActivity {
                     etiqueta.setError("Etiqueta invalida");
                 else if(charSequence.toString().contains("\n"))
                     insertaEtiqueta(charSequence.toString());
-
-
             }
             @Override
             public void afterTextChanged(Editable editable) {

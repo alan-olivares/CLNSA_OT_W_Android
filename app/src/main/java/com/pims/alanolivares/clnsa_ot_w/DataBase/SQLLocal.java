@@ -13,8 +13,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  * @version v1.0
  */
 public class SQLLocal  extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "AAB_CLNSA.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "AAB_CLNSA.db";
 
     public SQLLocal(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

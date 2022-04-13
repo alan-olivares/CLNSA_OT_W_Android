@@ -15,6 +15,7 @@
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <!-- Customize your theme here. -->
     </style>
+
     <style name="Theme.CLNSA_OT_W_red" parent="Theme.AppCompat">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/verde_claro</item>
@@ -32,6 +33,7 @@
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <!-- Customize your theme here. -->
     </style>
+
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
         <item name="android:background">@color/verde_claro</item>
@@ -58,6 +60,7 @@
         <item name="windowNoTitle">true</item>
         <item name="textFillColor">@color/black</item>
     </style>
+
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/rojo_danger</item>
         <item name="android:colorButtonNormal">@color/rojo_danger</item>

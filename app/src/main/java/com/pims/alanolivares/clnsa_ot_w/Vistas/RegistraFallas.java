@@ -1,11 +1,6 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,13 +8,12 @@ import android.widget.EditText;
 
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadre;
-import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 public class RegistraFallas extends ClasePadre {
-    Button camara,aceptar;
-    EditText etiqueta;
-    CheckBox orificio,desajuste;
+    private Button camara,aceptar;
+    private EditText etiqueta;
+    private CheckBox orificio,desajuste;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

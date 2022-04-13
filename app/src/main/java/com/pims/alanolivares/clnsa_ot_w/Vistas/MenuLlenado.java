@@ -1,14 +1,9 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuPopupHelper;
-
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.Dialogos.Lanzas;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.BotonMenuAdapter;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadre;
-import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 import android.app.AlertDialog;
@@ -16,8 +11,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;

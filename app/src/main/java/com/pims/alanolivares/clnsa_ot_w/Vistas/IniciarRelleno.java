@@ -31,12 +31,12 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class IniciarRelleno extends ClasePadre {
-    NoScrollViewTable dataTable;
-    EditText etiqueta,lanza1,lanza2,lanza3;
-    Button camara,aceptar,desactivarLan,iniciarBom;
-    Timer timer;
-    String IdOrden="",tipo;
-    ProgressBar progressBar;
+    private NoScrollViewTable dataTable;
+    private EditText etiqueta,lanza1,lanza2,lanza3;
+    private Button camara,aceptar,desactivarLan,iniciarBom;
+    private Timer timer;
+    private String IdOrden="",tipo;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

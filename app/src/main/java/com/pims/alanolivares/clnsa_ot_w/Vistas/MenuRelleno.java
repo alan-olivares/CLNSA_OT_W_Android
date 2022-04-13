@@ -1,6 +1,5 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,10 +22,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MenuRelleno extends ClasePadre {
-    TextView total,donador,receptor;
-    String IdOrden;
-    ProgressBar progressBar;
-    GridView menuGrid;
+    private TextView total,donador,receptor;
+    private String IdOrden;
+    private ProgressBar progressBar;
+    private GridView menuGrid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

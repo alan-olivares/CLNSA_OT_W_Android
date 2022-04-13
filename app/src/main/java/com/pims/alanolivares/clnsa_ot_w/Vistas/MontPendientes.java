@@ -29,8 +29,8 @@ import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 
 public class MontPendientes extends ClasePadreFragment {
-    TableView<String[]> dataTable;
-    int idBodega;
+    private TableView<String[]> dataTable;
+    private int idBodega;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

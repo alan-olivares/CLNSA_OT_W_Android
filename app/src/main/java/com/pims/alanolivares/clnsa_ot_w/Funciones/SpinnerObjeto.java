@@ -11,8 +11,8 @@ package com.pims.alanolivares.clnsa_ot_w.Funciones;
  *
  */
 public class SpinnerObjeto {
-    int id;
-    String valor;
+    private int id;
+    private String valor;
 
     public SpinnerObjeto(int id, String valor) {
         this.id = id;

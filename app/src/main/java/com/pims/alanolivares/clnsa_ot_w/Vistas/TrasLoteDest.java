@@ -23,12 +23,12 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class TrasLoteDest extends ClasePadre {
-    Button bombear;
-    EditText lectura;
-    NoScrollViewTable dataTable;
-    String idTanque,idOrden,idregtanque,lanzaLec,tipo;
-    Timer timer;
-    ProgressBar progressBar;
+    private Button bombear;
+    private EditText lectura;
+    private NoScrollViewTable dataTable;
+    private String idTanque,idOrden,idregtanque,lanzaLec,tipo;
+    private Timer timer;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +54,7 @@ public class TrasLoteDest extends ClasePadre {
     }
     private void iniciarBombeo(){
         try {
+            getFunciones().insertaData("update Com_TagsActual set Valor = 0 where IdTag =3",SQLConnection.db_Emba);
             if(bombear.getText().toString().toLowerCase().equals("iniciar bombeo")){
                 getFunciones().insertaData("update Com_TagsActual set Valor = 1 where IdTag = 1",SQLConnection.db_Emba);
                 bombear.setBackgroundColor(ContextCompat.getColor(this,R.color.rojo_danger) );

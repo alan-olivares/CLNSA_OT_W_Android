@@ -22,12 +22,12 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class IdentRelleno extends ClasePadre {
-    Button agregar,camara;
-    TextView total,orden;
-    EditText etiqueta;
-    NoScrollViewTable dataTable;
-    String idOrden,tipo;
-    ProgressBar progressBar;
+    private Button agregar,camara;
+    private TextView total,orden;
+    private EditText etiqueta;
+    private NoScrollViewTable dataTable;
+    private String idOrden,tipo;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,20 +1,15 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
-import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
+
 import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
-import android.Manifest;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,10 +20,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -37,35 +28,25 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class MenuLateral extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    Llenado llenado =new Llenado();
-    Relleno rellenado =new Relleno();
-    Trasiego trasiego=new Trasiego();
-    TrasiegoHoover trasiegoHoover= new TrasiegoHoover();
-    Reparacion reparacion=new Reparacion();
-    Revision revision=new Revision();
-    Montacargas montacargas=new Montacargas();
-    Inventario inventario=new Inventario();
-    Configuracion configuracion;
-    Object paginas[]={llenado,rellenado,trasiego,trasiegoHoover,reparacion,revision,montacargas,inventario};
-    int vistas[]={R.id.llenado,R.id.relleno,R.id.trasiego,R.id.trasiegoHo,R.id.reparacion,R.id.revision,R.id.montacargas,R.id.inventario};
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle actionBarDrawerToggle;
-    Toolbar toolbar;
-    NavigationView navigationView;
+    private Llenado llenado =new Llenado();
+    private Relleno rellenado =new Relleno();
+    private Trasiego trasiego=new Trasiego();
+    private TrasiegoHoover trasiegoHoover= new TrasiegoHoover();
+    private Reparacion reparacion=new Reparacion();
+    private Revision revision=new Revision();
+    private Montacargas montacargas=new Montacargas();
+    private Inventario inventario=new Inventario();
+    private TraspasoHoover traspaso=new TraspasoHoover();
+    private Configuracion configuracion;
+    private Object paginas[]={llenado,rellenado,trasiego,trasiegoHoover,reparacion,revision,montacargas,inventario};
+    private int vistas[]={R.id.llenado,R.id.relleno,R.id.trasiego,R.id.trasiegoHo,R.id.reparacion,R.id.revision,R.id.montacargas,R.id.inventario};
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,7 +161,12 @@ public class MenuLateral extends AppCompatActivity implements NavigationView.OnN
             fragmentTransaction.replace(R.id.contenedor,trasiego);
             fragmentTransaction.commit();
             item.setCheckable(true);
-        } else if (id == R.id.trasiegoHo) {
+        } else if (id == R.id.traspasoHo) {
+            fragmentTransaction=fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.contenedor,traspaso);
+            fragmentTransaction.commit();
+            item.setCheckable(true);
+        } else  if (id == R.id.trasiegoHo) {
             fragmentTransaction=fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.contenedor,trasiegoHoover);
             fragmentTransaction.commit();

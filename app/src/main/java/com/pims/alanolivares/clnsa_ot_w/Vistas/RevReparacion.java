@@ -1,7 +1,5 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,10 +11,10 @@ import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadre;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 public class RevReparacion extends ClasePadre {
-    String idAlcohol,fecha;
-    EditText compas,bisel,duelas,juntura,tapas,poro,orificio;
-    Button aceptar;
-    ProgressBar progressBar;
+    private String idAlcohol,fecha;
+    private EditText compas,bisel,duelas,juntura,tapas,poro,orificio;
+    private Button aceptar;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

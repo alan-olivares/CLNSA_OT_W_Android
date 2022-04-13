@@ -35,10 +35,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ResultTest extends ClasePadre {
-    Button aceptar,camara,guardar;
-    EditText etiqueta,uso,edad;
-    TextView aprovados;
-    RadioButton aprovado,descartado;
+    private Button aceptar,camara,guardar;
+    private EditText etiqueta,uso,edad;
+    private TextView aprovados;
+    private RadioButton aprovado,descartado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

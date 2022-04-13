@@ -16,12 +16,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class AccionMant extends ClasePadre {
-    Button aceptar;
-    EditText aros,tapas,duela;
-    CheckBox cepillado,reparacion,canal;
-    TextView etiqueta;
-    String eti,barrica;
-    ProgressBar progressBar;
+    private Button aceptar;
+    private EditText aros,tapas,duela;
+    private CheckBox cepillado,reparacion,canal;
+    private TextView etiqueta;
+    private String eti,barrica;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

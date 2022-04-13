@@ -14,10 +14,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Lanzas extends AppCompatActivity {
-    Button guardar;
-    Switch lanza1,lanza2,lanza3;
-    ImageButton cerrar;
-    FuncionesGenerales func;
+    private Button guardar;
+    private Switch lanza1,lanza2,lanza3;
+    private ImageButton cerrar;
+    private FuncionesGenerales func;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

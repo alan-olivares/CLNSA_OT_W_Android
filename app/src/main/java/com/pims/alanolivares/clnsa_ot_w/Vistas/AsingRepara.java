@@ -1,7 +1,4 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,11 +13,11 @@ import com.pims.alanolivares.clnsa_ot_w.Funciones.SpinnerObjeto;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 public class AsingRepara extends ClasePadre {
-    Button aceptar;
-    Spinner usuarios;
-    RadioButton cambio,reparacion;
-    TextView etiqueta;
-    String eti,barrica;
+    private Button aceptar;
+    private Spinner usuarios;
+    private RadioButton cambio,reparacion;
+    private TextView etiqueta;
+    private String eti,barrica;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

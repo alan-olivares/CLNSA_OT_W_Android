@@ -1,6 +1,5 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuItemCompat;
 
 import android.os.Bundle;
@@ -20,23 +19,21 @@ import com.pims.alanolivares.clnsa_ot_w.Funciones.SpinnerObjeto;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
-import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class ResumenInventario extends ClasePadre {
-    Spinner planta,bodega,costado,fila,torre,nivel;
-    NoScrollViewTable tabla;
-    TextView barriles,litros;
-    Button buscar;
-    ProgressBar progressBar;
+    private Spinner planta,bodega,costado,fila,torre,nivel;
+    private NoScrollViewTable tabla;
+    private TextView barriles,litros;
+    private Button buscar;
+    private ProgressBar progressBar;
     private SearchView sear;
-    String tablaDa[][];
+    private String tablaDa[][];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +48,6 @@ public class ResumenInventario extends ClasePadre {
         nivel=findViewById(R.id.nivelRI);
         planta=findViewById(R.id.plantaRI);
         tabla=findViewById(R.id.tablaRI);
-        //setCopyEtiqueta(tabla);
         tabla.setHeaderAdapter(new SimpleTableHeaderAdapter(this,new String[]{"Etiqueta","Año","Alcohol","Tipo","Litros"}));
         TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(this, 4, 90);
         columnModel.setColumnWidth(0,150);

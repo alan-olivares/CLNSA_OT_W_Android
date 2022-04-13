@@ -24,10 +24,10 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 
 
 public class Llenado extends ClasePadreFragment {
-    TableView<String[]> dataTable;
-    ProgressBar progressBar;
-    JSONArray jsonArray;
-    String[] spaceProbeHeaders={"Tanque","Alcohol","Año","IdLote"};
+    private TableView<String[]> dataTable;
+    private ProgressBar progressBar;
+    private JSONArray jsonArray;
+    private String[] spaceProbeHeaders={"Tanque","Alcohol","Año","IdLote"};
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

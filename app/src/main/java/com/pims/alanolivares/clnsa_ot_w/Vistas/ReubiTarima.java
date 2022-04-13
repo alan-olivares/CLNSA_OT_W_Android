@@ -1,6 +1,5 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
@@ -21,11 +20,11 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 public class ReubiTarima extends ClasePadre {
-    Spinner planta,bodega,costado,fila,torre,nivel;
-    Button reubicar,camara;
-    TextView mensaje,aviso;
-    EditText etiqueta;
-    ArrayList<SpinnerObjeto> listaNiveles;
+    private Spinner planta,bodega,costado,fila,torre,nivel;
+    private Button reubicar,camara;
+    private TextView mensaje,aviso;
+    private EditText etiqueta;
+    private ArrayList<SpinnerObjeto> listaNiveles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

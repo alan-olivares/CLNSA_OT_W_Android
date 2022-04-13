@@ -1,10 +1,7 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +13,6 @@ import com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
@@ -24,10 +20,10 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class ConsultaBarril extends ClasePadre {
-    TextView annio,alcohol,tipo,tapa,litros,llenada,relleno,ubicacion,ultima;
-    NoScrollViewTable tabla;
-    Button camara,aceptar;
-    EditText etiqueta;
+    private TextView annio,alcohol,tipo,tapa,litros,llenada,relleno,ubicacion,ultima;
+    private NoScrollViewTable tabla;
+    private Button camara,aceptar;
+    private EditText etiqueta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

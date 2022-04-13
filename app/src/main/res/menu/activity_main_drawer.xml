@@ -21,6 +21,11 @@
             android:icon="@drawable/ic_baseline_work_24"
             android:title="Trasiego" />
         <item
+            android:id="@+id/traspasoHo"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_work_24"
+            android:title="Taspaso Hoover" />
+        <item
             android:id="@+id/trasiegoHo"
             android:checkable="true"
             android:icon="@drawable/ic_baseline_work_24"

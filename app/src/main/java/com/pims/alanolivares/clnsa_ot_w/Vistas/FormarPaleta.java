@@ -21,12 +21,12 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class FormarPaleta extends ClasePadre {
-    Button agregar,formar,camara;
-    EditText etiqueta;
-    NoScrollViewTable dataTable;
-    TextView total;
-    String pallet;
-    ProgressBar progressBar;
+    private Button agregar,formar,camara;
+    private EditText etiqueta;
+    private NoScrollViewTable dataTable;
+    private TextView total;
+    private String pallet;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

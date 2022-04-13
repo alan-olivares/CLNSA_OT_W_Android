@@ -19,4 +19,6 @@
     <string name="title_activity_asing_repa">Reparación de barriles</string>
     <string name="title_activity_resumen_inv">Resumen de inventario</string>
     <string name="title_activity_rubicar_tarima">Reubicar Tarima</string>
+    <string name="title_activity_traspaso_hoover_opc">TraspasoHooverOpc</string>
+    <string name="title_activity_ident_trasiego_parcial">IdentTrasiegoParcial</string>
 </resources>

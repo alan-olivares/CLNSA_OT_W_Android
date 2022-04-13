@@ -34,9 +34,9 @@ import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 
 public class MontRealizadas extends ClasePadreFragment {
-    TableView<String[]> dataTable;
-    int idBodega;
-    boolean montrando=false;
+    private TableView<String[]> dataTable;
+    private int idBodega;
+    private boolean montrando=false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

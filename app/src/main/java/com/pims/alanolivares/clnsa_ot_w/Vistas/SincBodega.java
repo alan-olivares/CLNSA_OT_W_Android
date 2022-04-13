@@ -29,11 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SincBodega extends ClasePadre {
-    TextView ultima;
-    Button sincronizar,todas;
-    Spinner bodegas;
-    String canalID = "my_channel_id_01";
-    int notificationID = 100;
+    private TextView ultima;
+    private Button sincronizar,todas;
+    private Spinner bodegas;
+    private String canalID = "my_channel_id_01";
+    private int notificationID = 100;
 
 
     @Override

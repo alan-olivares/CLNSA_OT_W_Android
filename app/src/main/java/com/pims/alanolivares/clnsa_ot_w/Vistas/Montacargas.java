@@ -47,13 +47,13 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class Montacargas extends ClasePadreFragment {
-    TabLayout mTabs;
-    View mIndicator;
-    ViewPager mViewPager;
+    private TabLayout mTabs;
+    private View mIndicator;
+    private ViewPager mViewPager;
     private int indicatorWidth;
-    AdapterVentana adapter;
-    int idBodega;
-    ProgressBar progressBar;
+    private AdapterVentana adapter;
+    private int idBodega;
+    private ProgressBar progressBar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

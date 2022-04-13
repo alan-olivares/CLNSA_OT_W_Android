@@ -1,10 +1,6 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,25 +8,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadreFragment;
-import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 import de.codecrafters.tableview.TableView;
-import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
-import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class Trasiego extends ClasePadreFragment {
-    TableView<String[]> dataTable;
-    ProgressBar progressBar;
-    String barriles[][];
+    private TableView<String[]> dataTable;
+    private ProgressBar progressBar;
+    private String barriles[][];
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +37,7 @@ public class Trasiego extends ClasePadreFragment {
         String[] spaceProbeHeaders={"Orden","Bodega","Fecha","Tanque","Cant"};
         setTabla(dataTable,spaceProbeHeaders);
         TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(getContext(), 5, 95);
+        columnModel.setColumnWidth(1,120);
         columnModel.setColumnWidth(2,120);
         dataTable.setColumnModel(columnModel);
         setTitle("Órdenes de Trasiego");

@@ -40,11 +40,11 @@ public abstract class ClasePadreFragment  extends Fragment {
     /**
      * Referencia a la clase de FuncionesGenerales
      */
-    FuncionesGenerales func;
+    private FuncionesGenerales func;
     /**
      * Editext del campo etiqueta
      */
-    EditText etiqueta;
+    private EditText etiqueta;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

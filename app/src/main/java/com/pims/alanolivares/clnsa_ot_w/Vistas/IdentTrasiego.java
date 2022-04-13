@@ -1,8 +1,5 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +12,6 @@ import android.widget.TextView;
 
 import com.pims.alanolivares.clnsa_ot_w.DataBase.SQLConnection;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.ClasePadre;
-import com.pims.alanolivares.clnsa_ot_w.Funciones.FuncionesGenerales;
 import com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
@@ -27,13 +23,14 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class IdentTrasiego extends ClasePadre {
-    NoScrollViewTable dataTable;
-    TextView total,tanque,alcohol,annio,barrVac,uso;
-    Button finalizar,trasegar,camara,aceptar;
-    String idOrden,tanqueId,tipo;
-    EditText etiqueta;
-    int totalBarriles=0;
-    ProgressBar progressBar;
+    private NoScrollViewTable dataTable;
+    private TextView total,tanque,alcohol,annio,barrVac,uso;
+    private Button finalizar,trasegar,camara,aceptar;
+    private String idOrden,tanqueId,tipo;
+    private EditText etiqueta;
+    private int totalBarriles=0;
+    private ProgressBar progressBar;
+    private int llaves=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +65,7 @@ public class IdentTrasiego extends ClasePadre {
         });
     }
     private void inicializar(){
+        llaves=tipo.equals("1")?4:5;
         total=findViewById(R.id.totalIT);
         tanque=findViewById(R.id.tanqueIT);
         alcohol=findViewById(R.id.alcoholIT);
@@ -81,10 +79,24 @@ public class IdentTrasiego extends ClasePadre {
         camara=findViewById(R.id.camaraIT);
         aceptar=findViewById(R.id.agregarIT);
         progressBar=findViewById(R.id.progressIT);
-        String[] spaceProbeHeaders={"Etiqueta","Uso","Edad","Capacidad"};
-        TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(this, 4, 90);
-        columnModel.setColumnWidth(0,150);
-        columnModel.setColumnWidth(3,140);
+        configurar(tipo);
+
+    }
+    private void configurar(String tipo){
+        String[] spaceProbeHeaders=tipo.equals("1")?new String[]{"Etiqueta","Uso","Edad","Capacidad"}: new String[]{"Etiqueta", "Uso", "Alcohol", "Capacidad","Tipo"};
+        TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(this, llaves, 90);
+        switch (tipo){
+            case "1":
+                columnModel.setColumnWidth(0,150);
+                columnModel.setColumnWidth(3,140);
+                break;
+            case "2":
+                columnModel.setColumnWidth(0,150);
+                columnModel.setColumnWidth(2,140);
+                columnModel.setColumnWidth(3,140);
+                columnModel.setColumnWidth(4,120);
+                break;
+        }
         dataTable.setColumnModel(columnModel);
         dataTable.setHeaderAdapter(new SimpleTableHeaderAdapter(this,spaceProbeHeaders));
         setCopyEtiqueta(dataTable,0);
@@ -98,7 +110,7 @@ public class IdentTrasiego extends ClasePadre {
                 @Override
                 public void run() {
                     try {
-                        String consulta=tipo.equals("1")?"exec sp_ValidaEtiTras_v2 '"+eti+"','"+idOrden+"'":"exec sp_ValidaEtiTrasHoov '"+eti+"','"+idOrden+"','"+tanqueId+"'";
+                        String consulta=tipo.equals("1")?"exec sp_ValidaEtiTras_v2 '"+eti+"','"+idOrden+"'":"exec sp_ValidaEtiTrasHoov '"+eti+"','"+idOrden+"','"+tanqueId+"',1";
                         JSONArray jsonArray=getFunciones().consultaJson(consulta,SQLConnection.db_AAB);
                         getFunciones().mostrarMensaje(jsonArray.getJSONObject(0).getString("msg"));
                         cargarBarriles();
@@ -191,16 +203,17 @@ public class IdentTrasiego extends ClasePadre {
     private void cargarBarriles(){
         String consulta=tipo.equals("1")?"exec sp_Tras_Opera_Detail '"+idOrden+"'"
                 :"SELECT isnull((('01' + right('00' + convert(varChar(2),1),2) + right('000000' + convert(varChar(6),OpHis.Consecutivo),6))),'Sin Asignar') as Etiqueta, " +
-                "E.Codigo,Al.Descripcion as Alcohol,OpHis.Capacidad from WM_OperacionTQH Op " +
+                "C.Codigo as Edad,Al.Descripcion as Alcohol,OpHis.Capacidad,case when OpHis.tipoLl=1 then 'Completo' else 'Parcial' end as Tipo from WM_OperacionTQH Op " +
                 "left join WM_OperacionTQHDetalle OpDe on Op.IdOperacion = OpDe.IdOperacion left join WM_OperacionTQHBarrilHis OpHis on OpHis.IdOperacion=Op.IdOperacion " +
                 "left Join WM_LoteBarrica LB on LB.IdLoteBarica = OpHis.IdLoteBarrica inner Join PR_Lote L on L.Idlote = LB.IdLote  " +
                 "inner Join CM_CodEdad CE on CE.IdCodEdad = OpHis.IdCodificacion " +
                 "inner Join CM_Codificacion C on C.IdCodificacion = CE.IdCodificicacion " +
                 "inner Join CM_Edad E on E.IdEdad = CE.IdEdad inner Join CM_Alcohol Al on Al.IdAlcohol = L.IdAlcohol where OpHis.IdOrden='"+idOrden+"'";
         try {
-            tabla=getFunciones().consultaTabla(consulta, SQLConnection.db_AAB,4);
+            tabla=getFunciones().consultaTabla(consulta, SQLConnection.db_AAB,llaves);
             //trasegar.setEnabled(tabla.length==totalBarriles);
             toggleButtons(tabla.length<totalBarriles);
+            trasegar.setEnabled(tipo.equals("2") && tabla.length>=(totalBarriles-1));
             total.setText("Total: "+tabla.length);
             dataTable.setDataAdapter(new SimpleTableDataAdapter(this, tabla));
             dataTable.setAutoHeight(tabla.length);

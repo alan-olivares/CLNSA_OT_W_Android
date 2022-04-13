@@ -37,8 +37,8 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class Inventario extends ClasePadreFragment {
-    ImageButton estructura,bodega,resumen,consulta;
-    String consultas[][]={{"select AlmacenId,Nombre,[Descripcion],[Consecutivo],[PlantaID] from AA_Almacen",
+    private ImageButton estructura,bodega,resumen,consulta;
+    private String consultas[][]={{"select AlmacenId,Nombre,[Descripcion],[Consecutivo],[PlantaID] from AA_Almacen",
             "AA_Almacen"},{"select [AreaId],[AlmacenId] ,[Nombre],[Consecutivo] from AA_Area","AA_Area"},
             {"SELECT [NivelID],[PosicionId],[Nombre],[Consecutivo] FROM AA_Nivel","AA_Nivel"},
             {"SELECT [PlantaID],[Nombre],[Descripcion],[Consecutivo] FROM AA_Plantas","AA_Plantas"},

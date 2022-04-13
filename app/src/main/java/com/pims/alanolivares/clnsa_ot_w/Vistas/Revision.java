@@ -33,8 +33,8 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 
 public class Revision extends ClasePadreFragment {
-    TableView<String[]> dataTable;
-    ProgressBar progressBar;
+    private TableView<String[]> dataTable;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

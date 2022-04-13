@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Vistas.TrasiegoHooverInicia">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/progressIT"
+                android:indeterminateTint="@color/verde_claro"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:foregroundGravity="center"
+                android:visibility="gone"
+                android:indeterminate="true" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="30dp"
+                android:text="Orden de trasiego hoover"
+                android:textSize="18sp"
+                android:layout_below="@+id/progressIT"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/linearDetalles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tanqueO"
+                        android:text="Tanque: "
+                        android:textSize="18sp"
+                        android:textAlignment="center"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"></TextView>
+                    <TextView
+                        android:id="@+id/tanqueD"
+                        android:text="Alcohol: "
+                        android:textSize="18sp"
+                        android:textAlignment="center"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"></TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/litrosT"
+                        android:text="Año: "
+                        android:textSize="18sp"
+                        android:textAlignment="center"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"></TextView>
+                    <TextView
+                        android:id="@+id/litrosD"
+                        android:text="Uso: "
+                        android:textSize="18sp"
+                        android:textAlignment="center"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"></TextView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/linearDetalles"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:weightSum="2"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/iniciarBomTL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/verde_claro"
+                    android:layout_marginLeft="10dp"
+                    android:enabled="false"
+                    android:text="Iniciar bombeo" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="textEnd"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:text="Lectura PCL (lts):"></TextView>
+                    <EditText
+                        android:id="@+id/lecturaTLD"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"></EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/layout5"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:weightSum="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Detalle del alcohol en tanque"
+                    android:textAlignment="center"
+                    android:textSize="18dp"
+                    android:textStyle="bold"></TextView>
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable
+                        android:id="@+id/tablaTHI"
+                        android:layout_height="0dp"
+                        android:layout_width="match_parent"
+                        app:tableView_columnCount="4"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="50dp"/>
+                </HorizontalScrollView>
+
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

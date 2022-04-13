@@ -1,19 +1,11 @@
 package com.pims.alanolivares.clnsa_ot_w.Vistas;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuItemCompat;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -24,20 +16,16 @@ import com.pims.alanolivares.clnsa_ot_w.Funciones.NoScrollViewTable;
 import com.pims.alanolivares.clnsa_ot_w.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
-import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class AvanceOrden extends ClasePadre {
-    NoScrollViewTable dataTable;
-    TextView cantidad;
-    ProgressBar progressBar;
+    private NoScrollViewTable dataTable;
+    private TextView cantidad;
+    private ProgressBar progressBar;
     private SearchView sear;
-    String tabla[][];
-
+    private String tabla[][];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -42,9 +42,9 @@ public class LoginActivity extends AppCompatActivity {
     // UI references.
     private AutoCompleteTextView usuarioEdit;
     private EditText contrasenaEdit,pistola;
-    Boolean as=true;
-    FuncionesGenerales func;
-    ProgressBar progressBar;
+    private Boolean as=true;
+    private FuncionesGenerales func;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

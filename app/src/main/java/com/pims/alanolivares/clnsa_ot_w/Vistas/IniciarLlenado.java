@@ -49,12 +49,12 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class IniciarLlenado extends ClasePadre {
-    NoScrollViewTable dataTable;
-    EditText etiqueta,tapa,lanza1,lanza2,lanza3;
-    Button camara,aceptar,desactivarLan,iniciarBom;
-    Timer timer;
-    String usuario="",IdLote="";
-    ProgressBar progressBar;
+    private NoScrollViewTable dataTable;
+    private EditText etiqueta,tapa,lanza1,lanza2,lanza3;
+    private Button camara,aceptar,desactivarLan,iniciarBom;
+    private Timer timer;
+    private String usuario="",IdLote="";
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

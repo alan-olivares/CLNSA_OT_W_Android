@@ -20,11 +20,11 @@ import com.pims.alanolivares.clnsa_ot_w.R;
 import java.util.ArrayList;
 
 public class Configuracion extends ClasePadreFragment {
-    Button guardar;
-    Spinner bodegas;
-    EditText pistola,nombre;
-    ArrayList<SpinnerObjeto> lista;
-    TextView nombreT,pistolaT;
+    private Button guardar;
+    private Spinner bodegas;
+    private EditText pistola,nombre;
+    private ArrayList<SpinnerObjeto> lista;
+    private TextView nombreT,pistolaT;
     public Configuracion(TextView nombreT,TextView pistolaT){
         this.nombreT=nombreT;
         this.pistolaT=pistolaT;
