@@ -27,6 +27,7 @@ public class FormarPaleta extends ClasePadre {
     private TextView total;
     private String pallet;
     private ProgressBar progressBar;
+    private int tipo=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,7 @@ public class FormarPaleta extends ClasePadre {
         inicializar();
         setEtiqueta(etiqueta);
         setCamara(camara);
+        tipo=getIntent().getIntExtra("tipo",1);
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,7 +159,7 @@ public class FormarPaleta extends ClasePadre {
     private void agregarBarril(String eti) throws Exception{
         if(getFunciones().valEtiBarr(eti)){
             getFunciones().escribirLog(getFunciones().getCurrDate("dd/MM/yy hh:mm:ss")+"|"+pallet+"|"+eti+"|0");
-            getFunciones().insertaData("exec sp_Barril_Asign_Pallet '"+pallet+"','"+eti+"'",SQLConnection.db_AAB);
+            getFunciones().insertaData(tipo==1?"exec sp_Barril_Asign_Pallet '"+pallet+"','"+eti+"'":"exec sp_Barril_Asign_Pallet_Rev '"+pallet+"','"+eti+"'",SQLConnection.db_AAB);
             cargarBarriles();
         }else{
             getFunciones().mostrarMensaje("Etiqueta invalida");

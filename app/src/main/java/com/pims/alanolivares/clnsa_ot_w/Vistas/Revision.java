@@ -79,6 +79,7 @@ public class Revision extends ClasePadreFragment {
                 @Override
                 public void onClick(View v) {
                     Intent menu=new Intent(getContext(),FormarPaleta.class);
+                    menu.putExtra("tipo",2);
                     startActivity(menu);
                 }
             });
